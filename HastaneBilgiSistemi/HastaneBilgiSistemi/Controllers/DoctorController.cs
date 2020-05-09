@@ -22,7 +22,6 @@ namespace HastaneBilgiSistemi.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
-
         private readonly ILogger<DoctorController> _logger;
 
         public DoctorController(
@@ -40,7 +39,7 @@ namespace HastaneBilgiSistemi.Controllers
         // GET: Doctor
         public async Task<IActionResult> Index()
         {
-            var doctors = await _context.Users.Where(x => x.UserRoles.Any(a => a.RoleId == 2)).ToListAsync();
+            var doctors = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).ToListAsync();
             return View(doctors);
         }
 
@@ -49,18 +48,16 @@ namespace HastaneBilgiSistemi.Controllers
         {
             if (id == null)
                 return NotFound();
-
-            var applicationUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id && m.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor));
-            if (applicationUser == null)
+            var doctor = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).FirstOrDefaultAsync(m => m.Id == id);
+            if (doctor == null)
                 return NotFound();
-
-            return View(applicationUser);
+            return View(doctor);
         }
 
         // GET: Doctor/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Polyclinic = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
             return View();
         }
 
@@ -69,7 +66,7 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password")] RegisterVM userr)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password,ConfirmPassword,PolyclinicId")] DoctorRegisterVM userr)
         {
             if (ModelState.IsValid)
             {
@@ -93,6 +90,9 @@ namespace HastaneBilgiSistemi.Controllers
                     _logger.LogInformation("User created a new account with password.");
 
                     await _userManager.AddToRoleAsync(user, "Doctor");
+
+                    await _context.Doctor.AddAsync(new Doctor { UserId = user.Id, PolyclinicId = userr.PolyclinicId });
+                    await _context.SaveChangesAsync();
                 }
 
                 foreach (var error in result.Errors)
@@ -110,11 +110,20 @@ namespace HastaneBilgiSistemi.Controllers
         {
             if (id == null)
                 return NotFound();
-
-            var doctor = await _context.Users.FirstOrDefaultAsync(x => x.Id == id && x.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor));
+            var doctor = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).FirstOrDefaultAsync(x => x.Id == id);
             if (doctor == null)
                 return NotFound();
-            return View(doctor);
+            ViewBag.Polyclinic = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
+            return View(new DoctorUpdateVM
+            {
+                Id = (int)id,
+                BirthDate = doctor.User.BirthDate,
+                Email = doctor.User.Email,
+                FirstName = doctor.User.FirstName,
+                LastName = doctor.User.LastName,
+                PhoneNumber = doctor.User.PhoneNumber,
+                PolyclinicId = doctor.PolyclinicId
+            });
         }
 
         // POST: Doctor/Edit/5
@@ -122,7 +131,7 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password")] RegisterVM userr)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,PhoneNumber,BirthDate,Email,PolyclinicId")] DoctorUpdateVM userr)
         {
             if (id != userr.Id)
                 return NotFound();
@@ -131,32 +140,40 @@ namespace HastaneBilgiSistemi.Controllers
             {
                 try
                 {
-                    var user = new ApplicationUser
+                    var docc = await _context.Doctor.FirstOrDefaultAsync(x => x.Id == userr.Id);
+                    if (docc == null)
                     {
-                        FirstName = userr.FirstName,
-                        LastName = userr.LastName,
-                        FullName = userr.FirstName + " " + userr.LastName,
-                        UserName = userr.Email,
-                        NormalizedUserName = userr.Email.ToUpper(),
-                        Email = userr.Email,
-                        NormalizedEmail = userr.Email.ToUpper(),
-                        BirthDate = userr.BirthDate,
-                        PhoneNumber = userr.PhoneNumber,
-                        EmailConfirmed = true,
-                    };
+                        ModelState.AddModelError(string.Empty, "Doctor Can Not Find");
+                        return View(userr);
+                    }
+
+                    docc.PolyclinicId = userr.PolyclinicId;
+                    _context.Doctor.Update(docc);
+                    _context.SaveChanges();
+
+                    var user = await _userManager.FindByIdAsync(docc.UserId.ToString());
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "User Can Not Find");
+                        return View(userr);
+                    }
+                    user.FirstName = userr.FirstName;
+                    user.LastName = userr.LastName;
+                    user.FullName = userr.FirstName + " " + userr.LastName;
+                    user.UserName = userr.Email;
+                    user.NormalizedUserName = userr.Email.ToUpper();
+                    user.Email = userr.Email;
+                    user.NormalizedEmail = userr.Email.ToUpper();
+                    user.BirthDate = userr.BirthDate;
+                    user.PhoneNumber = userr.PhoneNumber;
                     await _userManager.UpdateAsync(user);
-                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ApplicationUserExists(userr.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -169,14 +186,10 @@ namespace HastaneBilgiSistemi.Controllers
             if (id == null)
                 return NotFound();
 
-            var applicationUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id && m.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor));
-            if (applicationUser == null)
-            {
+            var doctor = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).FirstOrDefaultAsync(m => m.Id == id);
+            if (doctor == null)
                 return NotFound();
-            }
-
-            return View(applicationUser);
+            return View(doctor);
         }
 
         // POST: Doctor/Delete/5
@@ -184,8 +197,16 @@ namespace HastaneBilgiSistemi.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var applicationUser = await _context.Users.FindAsync(id);
-            _context.Users.Remove(applicationUser);
+            var doctor = await _context.Doctor.FirstOrDefaultAsync(x => x.Id == id);
+            if (doctor == null)
+                return NotFound();
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == doctor.UserId);
+            if (doctor == null)
+                return NotFound();
+
+            _context.UserRoles.Remove(new ApplicationUserRole { UserId = doctor.UserId, RoleId = (int)Roles.Doctor });
+            _context.Users.Remove(user);
+            _context.Doctor.Remove(doctor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
