@@ -2,7 +2,7 @@
 
 namespace HastaneBilgiSistemi.Data.Model
 {
-    public class Diseas
+    public class Medication
     {
         public int Id { get; set; }
         [MaxLength(128)]
