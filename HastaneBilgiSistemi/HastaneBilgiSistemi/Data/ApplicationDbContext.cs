@@ -28,6 +28,22 @@ namespace HastaneBilgiSistemi.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
+            modelBuilder.Entity<ApplicationUserRole>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                userRole.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                userRole.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
+
             var r1 = new ApplicationRole { Id = 1, Name = "Admin", NormalizedName = "ADMIN" };
             var r2 = new ApplicationRole { Id = 2, Name = "Doctor", NormalizedName = "DOCTOR" };
             var r3 = new ApplicationRole { Id = 3, Name = "Secretary", NormalizedName = "SECRETARY" };

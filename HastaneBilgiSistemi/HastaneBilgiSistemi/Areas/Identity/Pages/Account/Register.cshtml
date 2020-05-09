@@ -4,14 +4,12 @@
     ViewData["Title"] = "Hasta Kayıt";
 }
 
-<h1>@ViewData["Title"]</h1>
 <h4>Yeni Hasta Kaydı Oluşturma</h4>
 <hr />
 
 <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
 
     <div class="row">
-
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Input.FirstName"></label>

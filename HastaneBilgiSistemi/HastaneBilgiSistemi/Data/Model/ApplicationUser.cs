@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HastaneBilgiSistemi.Data.Model
 {
     public class ApplicationUser : IdentityUser<int>
     {
-
         [MaxLength(128)]
         public string FirstName { get; set; }
         [MaxLength(128)]
@@ -16,10 +16,21 @@ namespace HastaneBilgiSistemi.Data.Model
 
         [MaxLength(20)]
         public override string PhoneNumber { get; set; }
-
         public DateTime  BirthDate { get; set; }
+
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+
     }
+
     public class ApplicationRole : IdentityRole<int>
     {
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
+
+    public class ApplicationUserRole : IdentityUserRole<int>
+    {
+        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationRole Role { get; set; }
+    }
+
 }
