@@ -25,7 +25,7 @@ namespace HastaneBilgiSistemi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<IdentityUserRole<string>>(eb => { eb.HasNoKey(); });
+            base.OnModelCreating(modelBuilder);
 
             var r1 = new ApplicationRole { Id = 1, Name = "Admin", NormalizedName = "ADMIN" };
             var r2 = new ApplicationRole { Id = 2, Name = "Doctor", NormalizedName = "DOCTOR" };
@@ -105,7 +105,7 @@ namespace HastaneBilgiSistemi.Data
                 new Diseas { Id = 9, Name = "Yumuşak Doku Enfeksiyonu " }
             );
 
-            base.OnModelCreating(modelBuilder);
+            
         }
 
     }
