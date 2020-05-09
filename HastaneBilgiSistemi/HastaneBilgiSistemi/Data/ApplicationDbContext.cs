@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace HastaneBilgiSistemi.Data
 {
@@ -35,10 +36,10 @@ namespace HastaneBilgiSistemi.Data
 
             var user = new ApplicationUser();
             var hasher = new PasswordHasher<ApplicationUser>();
-            var u1 = new ApplicationUser { Id = 1, UserName = "admin@admin.com", Email = "admin@admin.com", EmailConfirmed = true, NormalizedUserName = "admin@admin.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
-            var u2 = new ApplicationUser { Id = 2, UserName = "doctor@doctor.com", Email = "doctor@doctor.com", EmailConfirmed = true, NormalizedUserName = "doctor@doctor.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
-            var u3 = new ApplicationUser { Id = 3, UserName = "secretary@secretary.com", Email = "secretary@secretary.com", EmailConfirmed = true, NormalizedUserName = "secretary@secretary.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
-            var u4 = new ApplicationUser { Id = 4, UserName = "client@client.com", Email = "client@client.com", EmailConfirmed = true, NormalizedUserName = "client@client.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u1 = new ApplicationUser { Id = 1, UserName = "admin@admin.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "ADMIN@ADMIN.COM", Email = "admin@admin.com", EmailConfirmed = true, NormalizedUserName = "admin@admin.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u2 = new ApplicationUser { Id = 2, UserName = "doctor@doctor.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "DOCTOR@DOCTOR.COM", Email = "doctor@doctor.com", EmailConfirmed = true, NormalizedUserName = "doctor@doctor.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u3 = new ApplicationUser { Id = 3, UserName = "secretary@secretary.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "SECRETARY@SECRETARY.COM", Email = "secretary@secretary.com", EmailConfirmed = true, NormalizedUserName = "secretary@secretary.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u4 = new ApplicationUser { Id = 4, UserName = "client@client.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "CLIENT@CLIENT.COM", Email = "client@client.com", EmailConfirmed = true, NormalizedUserName = "client@client.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
             modelBuilder.Entity<ApplicationUser>().HasData(u1, u2, u3, u4);
 
             modelBuilder.Entity<IdentityUserRole<int>>().HasData(
@@ -105,7 +106,7 @@ namespace HastaneBilgiSistemi.Data
                 new Diseas { Id = 9, Name = "Yumuşak Doku Enfeksiyonu " }
             );
 
-            
+
         }
 
     }
