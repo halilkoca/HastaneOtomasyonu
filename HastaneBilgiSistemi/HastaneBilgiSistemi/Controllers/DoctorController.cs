@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Security.Cryptography.X509Certificates;
 
 namespace HastaneBilgiSistemi.Controllers
 {
@@ -23,27 +24,23 @@ namespace HastaneBilgiSistemi.Controllers
         private readonly ApplicationDbContext _context;
 
         private readonly ILogger<DoctorController> _logger;
-        private readonly IEmailSender _emailSender;
 
         public DoctorController(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
-            ILogger<DoctorController> logger,
-            IEmailSender emailSender
+            ILogger<DoctorController> logger
             )
         {
             _userManager = userManager;
             _context = context;
 
             _logger = logger;
-            _emailSender = emailSender;
         }
 
         // GET: Doctor
         public async Task<IActionResult> Index()
         {
-            _userManager.Users.
-            return View(await _context.Users.Where(x => x.UserRoles.Any(a => a.RoleId == 2)).ToListAsync());
+            return View(await _context.Users.Where(x => x.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor)).ToListAsync());
         }
 
         // GET: Doctor/Details/5
@@ -53,7 +50,7 @@ namespace HastaneBilgiSistemi.Controllers
                 return NotFound();
 
             var applicationUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id && m.UserRoles.Any(a => a.RoleId == 2));
+                .FirstOrDefaultAsync(m => m.Id == id && m.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor));
             if (applicationUser == null)
                 return NotFound();
 
@@ -113,10 +110,10 @@ namespace HastaneBilgiSistemi.Controllers
             if (id == null)
                 return NotFound();
 
-            var applicationUser = await _context.Users.FindAsync(id);
-            if (applicationUser == null)
+            var doctor = await _context.Users.FirstOrDefaultAsync(x => x.Id == id && x.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor));
+            if (doctor == null)
                 return NotFound();
-            return View(applicationUser);
+            return View(doctor);
         }
 
         // POST: Doctor/Edit/5
@@ -124,23 +121,21 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password")] RegisterVM applicationUser)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password")] RegisterVM userr)
         {
-            if (id != applicationUser.Id)
-            {
+            if (id != userr.Id)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(applicationUser);
+                    _context.Update(userr);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApplicationUserExists(applicationUser.Id))
+                    if (!ApplicationUserExists(userr.Id))
                     {
                         return NotFound();
                     }
@@ -151,7 +146,7 @@ namespace HastaneBilgiSistemi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(applicationUser);
+            return View(userr);
         }
 
         // GET: Doctor/Delete/5

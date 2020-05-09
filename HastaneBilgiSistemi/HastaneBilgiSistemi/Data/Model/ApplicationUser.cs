@@ -16,21 +16,20 @@ namespace HastaneBilgiSistemi.Data.Model
 
         [MaxLength(20)]
         public override string PhoneNumber { get; set; }
-        public DateTime  BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
-        public ICollection<ApplicationUserRole> UserRoles { get; set; }
-
-    }
-
-    public class ApplicationRole : IdentityRole<int>
-    {
-        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 
     public class ApplicationUserRole : IdentityUserRole<int>
     {
         public virtual ApplicationUser User { get; set; }
         public virtual ApplicationRole Role { get; set; }
+    }
+
+    public class ApplicationRole : IdentityRole<int>
+    {
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 
 }

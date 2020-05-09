@@ -28,19 +28,21 @@ namespace HastaneBilgiSistemi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
-            modelBuilder.Entity<ApplicationUserRole>(userRole =>
+            modelBuilder.Entity<ApplicationUser>(b =>
             {
-                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
-
-                userRole.HasOne(ur => ur.Role)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.RoleId)
-                    .IsRequired();
-
-                userRole.HasOne(ur => ur.User)
-                    .WithMany(r => r.UserRoles)
+                // Each User can have many entries in the UserRole join table
+                b.HasMany(e => e.UserRoles)
+                    .WithOne(e => e.User)
                     .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<ApplicationRole>(b =>
+            {
+                // Each Role can have many entries in the UserRole join table
+                b.HasMany(e => e.UserRoles)
+                    .WithOne(e => e.Role)
+                    .HasForeignKey(ur => ur.RoleId)
                     .IsRequired();
             });
 
@@ -121,7 +123,6 @@ namespace HastaneBilgiSistemi.Data
                 new Diseas { Id = 8, Name = "Akut Gastroenterit" },
                 new Diseas { Id = 9, Name = "Yumuşak Doku Enfeksiyonu " }
             );
-
 
         }
 
