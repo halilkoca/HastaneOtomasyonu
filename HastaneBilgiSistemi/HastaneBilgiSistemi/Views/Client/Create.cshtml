@@ -1,16 +1,15 @@
-﻿@model HastaneBilgiSistemi.Models.UserRegisterVM
+﻿@model UserRegisterVM
 
 @{
-    ViewData["Title"] = "Create Doctor";
+    ViewData["Title"] = "Create Client";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Create Doctor</h4>
+<h3>Create Client</h3>
 <hr />
 
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -36,13 +35,6 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="PolyclinicId" class="control-label"></label>
-                <select class="form-control" asp-for="PolyclinicId" asp-items="@(new SelectList(ViewBag.Polyclinic.Items, "Id", "Name"))">
-                    <option value="0">Please Select One</option>
-                </select>
-                <span asp-validation-for="PolyclinicId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" placeholder="Email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
@@ -64,6 +56,8 @@
         </div>
     </div>
 </form>
+
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

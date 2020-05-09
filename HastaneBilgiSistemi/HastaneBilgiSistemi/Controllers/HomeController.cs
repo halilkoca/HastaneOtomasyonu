@@ -6,26 +6,33 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using HastaneBilgiSistemi.Models;
+using HastaneBilgiSistemi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace HastaneBilgiSistemi.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            ILogger<HomeController> logger,
+            ApplicationDbContext context
+            )
         {
+            _context = context;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            var result = await _context.Reservation
+                .Include(x => x.Polyclinic)
+                .Include(x => x.Doctor).ThenInclude(doc => doc.User)
+                .Include(x => x.Client).ThenInclude(doc => doc.User)
+                .ToListAsync();
+            return View(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

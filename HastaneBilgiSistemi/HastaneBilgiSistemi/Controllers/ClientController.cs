@@ -5,61 +5,68 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HastaneBilgiSistemi.Data;
 using HastaneBilgiSistemi.Data.Model;
-using Microsoft.AspNetCore.Identity;
 using HastaneBilgiSistemi.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace HastaneBilgiSistemi.Controllers
 {
-    public class DoctorController : Controller
+    public class ClientController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<DoctorController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<ClientController> _logger;
 
-        public DoctorController(
+        public ClientController(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
-            ILogger<DoctorController> logger
+            ILogger<ClientController> logger
             )
         {
             _userManager = userManager;
-            _context = context;
 
+            _context = context;
             _logger = logger;
         }
 
-        // GET: Doctor
+        // GET: Client
         public async Task<IActionResult> Index()
         {
-            var doctors = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).ToListAsync();
-            return View(doctors);
+            return View(await _context.Client.Include(c => c.User).ToListAsync());
         }
 
-        // GET: Doctor/Details/5
+        // GET: Client/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
+            {
                 return NotFound();
-            var doctor = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).FirstOrDefaultAsync(m => m.Id == id);
-            if (doctor == null)
+            }
+
+            var client = await _context.Client
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (client == null)
+            {
                 return NotFound();
-            return View(doctor);
+            }
+
+            return View(client);
         }
 
-        // GET: Doctor/Create
-        public async Task<IActionResult> Create()
+        // GET: Client/Create
+        public IActionResult Create()
         {
-            ViewBag.Polyclinic = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
             return View();
         }
 
-        // POST: Doctor/Create
+        // POST: Client/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password,ConfirmPassword,PolyclinicId")] UserRegisterVM userr)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password,ConfirmPassword")] UserRegisterVM userr)
         {
             if (ModelState.IsValid)
             {
@@ -80,10 +87,10 @@ namespace HastaneBilgiSistemi.Controllers
                 var result = await _userManager.CreateAsync(user, userr.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("Doctor created a new account with password.");
+                    _logger.LogInformation("Client created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "Doctor");
-                    await _context.Doctor.AddAsync(new Doctor { UserId = user.Id, PolyclinicId = userr.PolyclinicId });
+                    await _userManager.AddToRoleAsync(user, "Client");
+                    await _context.Client.AddAsync(new Client { UserId = user.Id });
                     await _context.SaveChangesAsync();
                 }
 
@@ -97,33 +104,32 @@ namespace HastaneBilgiSistemi.Controllers
             return View(userr);
         }
 
-        // GET: Doctor/Edit/5
+        // GET: Client/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return NotFound();
-            var doctor = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).FirstOrDefaultAsync(x => x.Id == id);
-            if (doctor == null)
+            var client = await _context.Client.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            if (client == null)
                 return NotFound();
-            ViewBag.Polyclinic = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
+
             return View(new UserUpdateVM
             {
                 Id = (int)id,
-                BirthDate = doctor.User.BirthDate,
-                Email = doctor.User.Email,
-                FirstName = doctor.User.FirstName,
-                LastName = doctor.User.LastName,
-                PhoneNumber = doctor.User.PhoneNumber,
-                PolyclinicId = doctor.PolyclinicId
+                BirthDate = client.User.BirthDate,
+                Email = client.User.Email,
+                FirstName = client.User.FirstName,
+                LastName = client.User.LastName,
+                PhoneNumber = client.User.PhoneNumber
             });
         }
 
-        // POST: Doctor/Edit/5
+        // POST: Client/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,PhoneNumber,BirthDate,Email,PolyclinicId")] UserUpdateVM userr)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,PhoneNumber,BirthDate,Email")] UserUpdateVM userr)
         {
             if (id != userr.Id)
                 return NotFound();
@@ -132,18 +138,14 @@ namespace HastaneBilgiSistemi.Controllers
             {
                 try
                 {
-                    var docc = await _context.Doctor.FirstOrDefaultAsync(x => x.Id == userr.Id);
-                    if (docc == null)
+                    var clientt = await _context.Client.FirstOrDefaultAsync(x => x.Id == userr.Id);
+                    if (clientt == null)
                     {
-                        ModelState.AddModelError(string.Empty, "Doctor Can Not Find");
+                        ModelState.AddModelError(string.Empty, "Client Can Not Find");
                         return View(userr);
                     }
 
-                    docc.PolyclinicId = userr.PolyclinicId;
-                    _context.Doctor.Update(docc);
-                    _context.SaveChanges();
-
-                    var user = await _userManager.FindByIdAsync(docc.UserId.ToString());
+                    var user = await _userManager.FindByIdAsync(clientt.UserId.ToString());
                     if (user == null)
                     {
                         ModelState.AddModelError(string.Empty, "User Can Not Find");
@@ -160,52 +162,44 @@ namespace HastaneBilgiSistemi.Controllers
                     user.PhoneNumber = userr.PhoneNumber;
                     await _userManager.UpdateAsync(user);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!ApplicationUserExists(userr.Id))
-                        return NotFound();
-                    else
-                        throw;
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(userr);
         }
 
-        // GET: Doctor/Delete/5
+        // GET: Client/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var doctor = await _context.Doctor.Include(x => x.User).Include(x => x.Polyclinic).FirstOrDefaultAsync(m => m.Id == id);
-            if (doctor == null)
+            var client = await _context.Client.Include(c => c.User).FirstOrDefaultAsync(m => m.Id == id);
+            if (client == null)
                 return NotFound();
-            return View(doctor);
+            return View(client);
         }
 
-        // POST: Doctor/Delete/5
+        // POST: Client/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = await _context.Doctor.FirstOrDefaultAsync(x => x.Id == id);
-            if (doctor == null)
+            var client = await _context.Client.FirstOrDefaultAsync(x => x.Id == id);
+            if (client == null)
                 return NotFound();
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == doctor.UserId);
-            if (doctor == null)
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == client.UserId);
+            if (client == null)
                 return NotFound();
 
-            _context.UserRoles.Remove(new ApplicationUserRole { UserId = doctor.UserId, RoleId = (int)Roles.Doctor });
+            _context.UserRoles.Remove(new ApplicationUserRole { UserId = client.UserId, RoleId = (int)Roles.Client });
             _context.Users.Remove(user);
-            _context.Doctor.Remove(doctor);
+            _context.Client.Remove(client);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ApplicationUserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

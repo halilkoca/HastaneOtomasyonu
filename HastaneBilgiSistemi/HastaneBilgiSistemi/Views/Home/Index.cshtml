@@ -1,8 +1,45 @@
-﻿@{
+﻿@model List<HastaneBilgiSistemi.Data.Model.Reservation>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h4 class="display-5">Welcome To TURTEP Hospital</h4>
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Polyclinic</th>
+            <th>Doctor</th>
+            <th>Client</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Polyclinic.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctor.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
