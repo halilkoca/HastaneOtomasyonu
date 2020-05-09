@@ -7,6 +7,11 @@ namespace HastaneBilgiSistemi.Data.Model
 {
     public class ApplicationUser : IdentityUser<int>
     {
+        public ApplicationUser()
+        {
+            UserRoles = new HashSet<ApplicationUserRole>();
+        }
+
         [MaxLength(128)]
         public string FirstName { get; set; }
         [MaxLength(128)]
@@ -32,4 +37,19 @@ namespace HastaneBilgiSistemi.Data.Model
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 
+    public class ApplicationUserClaim : IdentityUserClaim<int>
+    {
+    }
+
+    public class ApplicationUserLogin : IdentityUserLogin<int>
+    {
+    }
+
+    public class ApplicationUserToken : IdentityUserToken<int>
+    {
+    }
+
+    public class ApplicationRoleClaim : IdentityRoleClaim<int>
+    {
+    }
 }

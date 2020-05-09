@@ -6,7 +6,11 @@ using System;
 
 namespace HastaneBilgiSistemi.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser
+        , ApplicationRole, int
+        , ApplicationUserClaim, ApplicationUserRole
+        , ApplicationUserLogin, ApplicationRoleClaim
+        , ApplicationUserToken>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -27,6 +31,21 @@ namespace HastaneBilgiSistemi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ApplicationUserRole>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                userRole.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                userRole.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity<ApplicationUser>(b =>
             {
@@ -54,17 +73,17 @@ namespace HastaneBilgiSistemi.Data
 
             var user = new ApplicationUser();
             var hasher = new PasswordHasher<ApplicationUser>();
-            var u1 = new ApplicationUser { Id = 1, UserName = "admin@admin.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "ADMIN@ADMIN.COM", Email = "admin@admin.com", EmailConfirmed = true, NormalizedUserName = "admin@admin.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
-            var u2 = new ApplicationUser { Id = 2, UserName = "doctor@doctor.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "DOCTOR@DOCTOR.COM", Email = "doctor@doctor.com", EmailConfirmed = true, NormalizedUserName = "doctor@doctor.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
-            var u3 = new ApplicationUser { Id = 3, UserName = "secretary@secretary.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "SECRETARY@SECRETARY.COM", Email = "secretary@secretary.com", EmailConfirmed = true, NormalizedUserName = "secretary@secretary.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
-            var u4 = new ApplicationUser { Id = 4, UserName = "client@client.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "CLIENT@CLIENT.COM", Email = "client@client.com", EmailConfirmed = true, NormalizedUserName = "client@client.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u1 = new ApplicationUser { Id = 1, FirstName = "Admin", LastName = "Admin", FullName = "Admin Admin", BirthDate = new DateTime(1955,1,1), UserName = "admin@admin.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "ADMIN@ADMIN.COM", Email = "admin@admin.com", EmailConfirmed = true, NormalizedUserName = "admin@admin.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u2 = new ApplicationUser { Id = 2, FirstName = "Rıfat", LastName = "Yaşar", FullName = "Rıfat Yaşar", BirthDate = new DateTime(1955, 1, 1), UserName = "doctor@doctor.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "DOCTOR@DOCTOR.COM", Email = "doctor@doctor.com", EmailConfirmed = true, NormalizedUserName = "doctor@doctor.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u3 = new ApplicationUser { Id = 3, FirstName = "Ayşe", LastName = "Gül", FullName = "Ayşe Gül", BirthDate = new DateTime(1955, 1, 1), UserName = "secretary@secretary.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "SECRETARY@SECRETARY.COM", Email = "secretary@secretary.com", EmailConfirmed = true, NormalizedUserName = "secretary@secretary.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
+            var u4 = new ApplicationUser { Id = 4, FirstName = "Osman", LastName = "Oduncu", FullName = "Osman Oduncu", BirthDate = new DateTime(1955, 1, 1), UserName = "client@client.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "CLIENT@CLIENT.COM", Email = "client@client.com", EmailConfirmed = true, NormalizedUserName = "client@client.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "+905325321234" };
             modelBuilder.Entity<ApplicationUser>().HasData(u1, u2, u3, u4);
 
-            modelBuilder.Entity<IdentityUserRole<int>>().HasData(
-                new IdentityUserRole<int> { UserId = u1.Id, RoleId = r1.Id },
-                new IdentityUserRole<int> { UserId = u2.Id, RoleId = r2.Id },
-                new IdentityUserRole<int> { UserId = u3.Id, RoleId = r3.Id },
-                new IdentityUserRole<int> { UserId = u4.Id, RoleId = r4.Id }
+            modelBuilder.Entity<ApplicationUserRole>().HasData(
+                new ApplicationUserRole { UserId = u1.Id, RoleId = r1.Id },
+                new ApplicationUserRole { UserId = u2.Id, RoleId = r2.Id },
+                new ApplicationUserRole { UserId = u3.Id, RoleId = r3.Id },
+                new ApplicationUserRole { UserId = u4.Id, RoleId = r4.Id }
             );
 
             modelBuilder.Entity<Medication>().HasData(

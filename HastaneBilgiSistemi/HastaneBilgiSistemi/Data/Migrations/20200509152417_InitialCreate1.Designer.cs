@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HastaneBilgiSistemi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200509143129_InitialCreate1")]
+    [Migration("20200509152417_InitialCreate1")]
     partial class InitialCreate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,31 +53,54 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "ee6a5b6b-fe77-4de2-9b64-46572d1ac056",
+                            ConcurrencyStamp = "662b6721-9581-4458-8187-2dcf2710620f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "79d91e77-0aa7-49df-89de-c44678a0590c",
+                            ConcurrencyStamp = "178c696b-adb0-4847-958b-470cf33f2b79",
                             Name = "Doctor",
                             NormalizedName = "DOCTOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "5f62fb33-ec13-4ced-ae2e-0e80a87d5b74",
+                            ConcurrencyStamp = "eff986c9-bd1f-4b53-8592-935872f4ad38",
                             Name = "Secretary",
                             NormalizedName = "SECRETARY"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "ff1da614-ea76-41e6-8b10-964bc586e517",
+                            ConcurrencyStamp = "b8b7f8f6-d559-4f94-85f7-a3ce3923f6ea",
                             Name = "Client",
                             NormalizedName = "CLIENT"
                         });
+                });
+
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUser", b =>
@@ -167,17 +190,20 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "7694b2a5-d55f-4fd5-a209-9f0a44789995",
+                            BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "7ba61a2f-dd81-48bf-a184-ffbc3e1d6258",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
+                            FirstName = "Admin",
+                            FullName = "Admin Admin",
+                            LastName = "Admin",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "admin@admin.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOuMYfT+e0s+SpmaKnxUvtW7Oqid87XqqEqO4vmTa7XHmNzIUhjlIOEsdT8pPbM/8g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPASut7584avIw5wcIAkBa79LFRtHNOPHrqLDgn5cS3ZpZU7O6k5AyyWhYY692TZHA==",
                             PhoneNumber = "+905325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dc1bdfeb-88e6-4c2f-9bb6-15c3d99ac17b",
+                            SecurityStamp = "c7b2f62a-41b4-47ff-9ac4-668d5ef72569",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         },
@@ -185,17 +211,20 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "fecdacf2-2725-4974-adf6-8ca617c3b44a",
+                            BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "22497238-0e62-4ad0-9bac-a83c88373ce5",
                             Email = "doctor@doctor.com",
                             EmailConfirmed = true,
+                            FirstName = "Rıfat",
+                            FullName = "Rıfat Yaşar",
+                            LastName = "Yaşar",
                             LockoutEnabled = false,
                             NormalizedEmail = "DOCTOR@DOCTOR.COM",
                             NormalizedUserName = "doctor@doctor.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEH2ilb8NfZ1T8mQs10YmDxFR5SzXfFyRy8sExUAwccYOy+Pw1kwK1pjXg6n8qEt7CA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECudSbSrZWTmx8lKguysMhBKB2uX6bhyFSZn/Gn7D1cAktG5I2cmvZ+xMpvagLnsYA==",
                             PhoneNumber = "+905325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7666c7d1-2cf4-4529-a024-350cc423f324",
+                            SecurityStamp = "097c7d89-d05b-41b1-8d45-064d08ebf687",
                             TwoFactorEnabled = false,
                             UserName = "doctor@doctor.com"
                         },
@@ -203,17 +232,20 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         {
                             Id = 3,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "8dfedf9f-ca16-4105-9ad5-609a1c85b299",
+                            BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "a7997f76-4de8-483e-a7ce-33a02f67f807",
                             Email = "secretary@secretary.com",
                             EmailConfirmed = true,
+                            FirstName = "Ayşe",
+                            FullName = "Ayşe Gül",
+                            LastName = "Gül",
                             LockoutEnabled = false,
                             NormalizedEmail = "SECRETARY@SECRETARY.COM",
                             NormalizedUserName = "secretary@secretary.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKXc6dbU0l2K0dKXQiGJ+0i2TDUbWE/IrCB23bkoGqSIe6kB76cRavniChLaZoxVSA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA54ACDAHLwEHApgudi9QVXkRCkf9h+o22U276MWqi9dx2l4bkvnrR305nvJz4hwBg==",
                             PhoneNumber = "+905325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e5341d57-b02e-4614-99f5-587e9d19137e",
+                            SecurityStamp = "e92b13c0-1c42-4c61-be95-2dc04a227054",
                             TwoFactorEnabled = false,
                             UserName = "secretary@secretary.com"
                         },
@@ -221,20 +253,127 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         {
                             Id = 4,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "60a3ce5d-8879-4ec7-80d9-803618ab3f63",
+                            BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "a114fe38-784e-4b79-af14-c414ce11c811",
                             Email = "client@client.com",
                             EmailConfirmed = true,
+                            FirstName = "Osman",
+                            FullName = "Osman Oduncu",
+                            LastName = "Oduncu",
                             LockoutEnabled = false,
                             NormalizedEmail = "CLIENT@CLIENT.COM",
                             NormalizedUserName = "client@client.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAECXlLg1ZVoIwMv68gQ1B7uTU+XUWqhAWWTfvzQXKog/ibUzWBEx/WwQAn0kzA1NVsA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDSgAura8IwJrqQSLnyeTelgceAOl8HH4sDX9VWC0LPi8gHL83vZgdBWoMMHO35suw==",
                             PhoneNumber = "+905325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a0e26543-cb08-42a0-b48a-e242b98fde74",
+                            SecurityStamp = "252db328-e197-47ed-9e9b-bf2ac23084f6",
                             TwoFactorEnabled = false,
                             UserName = "client@client.com"
                         });
+                });
+
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserLogin", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserRole", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            UserId = 4,
+                            RoleId = 4
+                        });
+                });
+
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserToken", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.Client", b =>
@@ -644,144 +783,55 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationRoleClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserLogin", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<int>");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            RoleId = 2
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            RoleId = 3
-                        },
-                        new
-                        {
-                            UserId = 4,
-                            RoleId = 4
-                        });
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserRole", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<int>");
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasIndex("RoleId");
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasDiscriminator().HasValue("ApplicationUserRole");
+            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserToken", b =>
+                {
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.Client", b =>
@@ -873,57 +923,6 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 {
                     b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
-                {
-                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
-                {
-                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
-                {
-                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
-                {
-                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("HastaneBilgiSistemi.Data.Model.ApplicationUserRole", b =>
-                {
-                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationRole", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HastaneBilgiSistemi.Data.Model.ApplicationUser", "User")
-                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

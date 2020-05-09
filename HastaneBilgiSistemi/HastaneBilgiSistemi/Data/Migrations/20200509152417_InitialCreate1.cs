@@ -158,8 +158,7 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,10 +368,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "ee6a5b6b-fe77-4de2-9b64-46572d1ac056", "Admin", "ADMIN" },
-                    { 2, "79d91e77-0aa7-49df-89de-c44678a0590c", "Doctor", "DOCTOR" },
-                    { 3, "5f62fb33-ec13-4ced-ae2e-0e80a87d5b74", "Secretary", "SECRETARY" },
-                    { 4, "ff1da614-ea76-41e6-8b10-964bc586e517", "Client", "CLIENT" }
+                    { 1, "662b6721-9581-4458-8187-2dcf2710620f", "Admin", "ADMIN" },
+                    { 2, "178c696b-adb0-4847-958b-470cf33f2b79", "Doctor", "DOCTOR" },
+                    { 3, "eff986c9-bd1f-4b53-8592-935872f4ad38", "Secretary", "SECRETARY" },
+                    { 4, "b8b7f8f6-d559-4f94-85f7-a3ce3923f6ea", "Client", "CLIENT" }
                 });
 
             migrationBuilder.InsertData(
@@ -380,21 +379,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "FullName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "7694b2a5-d55f-4fd5-a209-9f0a44789995", "admin@admin.com", true, null, null, null, false, null, "ADMIN@ADMIN.COM", "admin@admin.com", "AQAAAAEAACcQAAAAEOuMYfT+e0s+SpmaKnxUvtW7Oqid87XqqEqO4vmTa7XHmNzIUhjlIOEsdT8pPbM/8g==", "+905325321234", false, "dc1bdfeb-88e6-4c2f-9bb6-15c3d99ac17b", false, "admin@admin.com" },
-                    { 2, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "fecdacf2-2725-4974-adf6-8ca617c3b44a", "doctor@doctor.com", true, null, null, null, false, null, "DOCTOR@DOCTOR.COM", "doctor@doctor.com", "AQAAAAEAACcQAAAAEH2ilb8NfZ1T8mQs10YmDxFR5SzXfFyRy8sExUAwccYOy+Pw1kwK1pjXg6n8qEt7CA==", "+905325321234", false, "7666c7d1-2cf4-4529-a024-350cc423f324", false, "doctor@doctor.com" },
-                    { 4, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "60a3ce5d-8879-4ec7-80d9-803618ab3f63", "client@client.com", true, null, null, null, false, null, "CLIENT@CLIENT.COM", "client@client.com", "AQAAAAEAACcQAAAAECXlLg1ZVoIwMv68gQ1B7uTU+XUWqhAWWTfvzQXKog/ibUzWBEx/WwQAn0kzA1NVsA==", "+905325321234", false, "a0e26543-cb08-42a0-b48a-e242b98fde74", false, "client@client.com" },
-                    { 3, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "8dfedf9f-ca16-4105-9ad5-609a1c85b299", "secretary@secretary.com", true, null, null, null, false, null, "SECRETARY@SECRETARY.COM", "secretary@secretary.com", "AQAAAAEAACcQAAAAEKXc6dbU0l2K0dKXQiGJ+0i2TDUbWE/IrCB23bkoGqSIe6kB76cRavniChLaZoxVSA==", "+905325321234", false, "e5341d57-b02e-4614-99f5-587e9d19137e", false, "secretary@secretary.com" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "UserId", "RoleId", "Discriminator" },
-                values: new object[,]
-                {
-                                { 2, 2, "IdentityUserRole<int>" },
-                                { 1, 1, "IdentityUserRole<int>" },
-                                { 3, 3, "IdentityUserRole<int>" },
-                                { 4, 4, "IdentityUserRole<int>" }
+                    { 1, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "7ba61a2f-dd81-48bf-a184-ffbc3e1d6258", "admin@admin.com", true, "Admin", "Admin Admin", "Admin", false, null, "ADMIN@ADMIN.COM", "admin@admin.com", "AQAAAAEAACcQAAAAEPASut7584avIw5wcIAkBa79LFRtHNOPHrqLDgn5cS3ZpZU7O6k5AyyWhYY692TZHA==", "+905325321234", false, "c7b2f62a-41b4-47ff-9ac4-668d5ef72569", false, "admin@admin.com" },
+                    { 2, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "22497238-0e62-4ad0-9bac-a83c88373ce5", "doctor@doctor.com", true, "Rıfat", "Rıfat Yaşar", "Yaşar", false, null, "DOCTOR@DOCTOR.COM", "doctor@doctor.com", "AQAAAAEAACcQAAAAECudSbSrZWTmx8lKguysMhBKB2uX6bhyFSZn/Gn7D1cAktG5I2cmvZ+xMpvagLnsYA==", "+905325321234", false, "097c7d89-d05b-41b1-8d45-064d08ebf687", false, "doctor@doctor.com" },
+                    { 3, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a7997f76-4de8-483e-a7ce-33a02f67f807", "secretary@secretary.com", true, "Ayşe", "Ayşe Gül", "Gül", false, null, "SECRETARY@SECRETARY.COM", "secretary@secretary.com", "AQAAAAEAACcQAAAAEA54ACDAHLwEHApgudi9QVXkRCkf9h+o22U276MWqi9dx2l4bkvnrR305nvJz4hwBg==", "+905325321234", false, "e92b13c0-1c42-4c61-be95-2dc04a227054", false, "secretary@secretary.com" },
+                    { 4, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a114fe38-784e-4b79-af14-c414ce11c811", "client@client.com", true, "Osman", "Osman Oduncu", "Oduncu", false, null, "CLIENT@CLIENT.COM", "client@client.com", "AQAAAAEAACcQAAAAEDSgAura8IwJrqQSLnyeTelgceAOl8HH4sDX9VWC0LPi8gHL83vZgdBWoMMHO35suw==", "+905325321234", false, "252db328-e197-47ed-9e9b-bf2ac23084f6", false, "client@client.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -402,15 +390,15 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "COVID-19" },
-                    { 2, "Hipertansiyon" },
-                    { 3, "Hiperlipidemi " },
-                    { 4, "Akut Romatizmal Ateş" },
-                    { 5, "Multiple Skleroz" },
-                    { 6, "Üst Solunum Yolu Enfeksiyonu" },
-                    { 7, "Alt Solunum Yolu Enfeksiyonu" },
+                    { 9, "Yumuşak Doku Enfeksiyonu " },
                     { 8, "Akut Gastroenterit" },
-                    { 9, "Yumuşak Doku Enfeksiyonu " }
+                    { 7, "Alt Solunum Yolu Enfeksiyonu" },
+                    { 6, "Üst Solunum Yolu Enfeksiyonu" },
+                    { 2, "Hipertansiyon" },
+                    { 4, "Akut Romatizmal Ateş" },
+                    { 3, "Hiperlipidemi " },
+                    { 1, "COVID-19" },
+                    { 5, "Multiple Skleroz" }
                 });
 
             migrationBuilder.InsertData(
@@ -421,11 +409,11 @@ namespace HastaneBilgiSistemi.Data.Migrations
                     { 7, "SUPRAX SUSPANSIYON 50 ML." },
                     { 8, "SUPRAX 400 MG" },
                     { 5, "MACROL 250 MG 100 ML SUSPANSIYON" },
-                    { 4, "DEPOSİLİN 1.2 IU FLK" },
-                    { 1, "AZOSİLİN 30 TB" },
-                    { 2, "BACTRİM 200/40 MG 100 ML SÜSPANSİYON" },
+                    { 6, "NİDAZOL 500 MG FİLM TABLET" },
                     { 3, "DUOCİD ORAL SÜSPANSİYON 250MG/5ML 100ML" },
-                    { 6, "NİDAZOL 500 MG FİLM TABLET" }
+                    { 2, "BACTRİM 200/40 MG 100 ML SÜSPANSİYON" },
+                    { 1, "AZOSİLİN 30 TB" },
+                    { 4, "DEPOSİLİN 1.2 IU FLK" }
                 });
 
             migrationBuilder.InsertData(
@@ -433,26 +421,37 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 20, "Üroloji Servisi" },
-                    { 19, "Radyoloji Servisi" },
                     { 18, "Psikoloji Servisi" },
                     { 17, "Patoloji Servisi" },
                     { 16, "Ortopedi ve Travmatoloji Servisi" },
                     { 15, "Nöroşirüji Servisi" },
                     { 14, "Nöroloji Servisi" },
                     { 13, "Kulak Burun Boğaz Servisi" },
+                    { 12, "Kardiyoloji Servisi" },
                     { 11, "Kadın Hastalıkları ve Doğum Servisi" },
                     { 10, "Göz Servisi" },
-                    { 9, "Göğüs Hastalıkları Servisi" },
                     { 8, "Genel Cerrahi Servisi" },
                     { 7, "Fizik Tedavi Servisi" },
                     { 6, "Dahiliye Servisi" },
                     { 5, "Çocuk Servisi" },
+                    { 4, "Cilt Hastalıkları Servisi" },
                     { 3, "Beslenme ve Diyet Bölümü" },
                     { 2, "Anestezi ve Reanimasyon Servisi" },
                     { 1, "Ağız ve Diş Sağlığı Servisi" },
-                    { 12, "Kardiyoloji Servisi" },
-                    { 4, "Cilt Hastalıkları Servisi" }
+                    { 19, "Radyoloji Servisi" },
+                    { 9, "Göğüs Hastalıkları Servisi" },
+                    { 20, "Üroloji Servisi" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 }
                 });
 
             migrationBuilder.InsertData(

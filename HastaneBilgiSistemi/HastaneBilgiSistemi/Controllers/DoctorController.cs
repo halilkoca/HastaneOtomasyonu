@@ -40,7 +40,8 @@ namespace HastaneBilgiSistemi.Controllers
         // GET: Doctor
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.Where(x => x.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor)).ToListAsync());
+            var doctors = await _context.Users.Where(x => x.UserRoles.Any(a => a.RoleId == 2)).ToListAsync();
+            return View(doctors);
         }
 
         // GET: Doctor/Details/5
@@ -130,8 +131,21 @@ namespace HastaneBilgiSistemi.Controllers
             {
                 try
                 {
-                    _context.Update(userr);
-                    await _context.SaveChangesAsync();
+                    var user = new ApplicationUser
+                    {
+                        FirstName = userr.FirstName,
+                        LastName = userr.LastName,
+                        FullName = userr.FirstName + " " + userr.LastName,
+                        UserName = userr.Email,
+                        NormalizedUserName = userr.Email.ToUpper(),
+                        Email = userr.Email,
+                        NormalizedEmail = userr.Email.ToUpper(),
+                        BirthDate = userr.BirthDate,
+                        PhoneNumber = userr.PhoneNumber,
+                        EmailConfirmed = true,
+                    };
+                    await _userManager.UpdateAsync(user);
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -153,12 +167,10 @@ namespace HastaneBilgiSistemi.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var applicationUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.UserRoles.Any(a => a.RoleId == (int)Roles.Doctor));
             if (applicationUser == null)
             {
                 return NotFound();
