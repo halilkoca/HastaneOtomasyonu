@@ -33,6 +33,7 @@ namespace HastaneBilgiSistemi.Areas.Identity.Pages.Account
         {
             _userManager = userManager;
             _signInManager = signInManager;
+
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -46,6 +47,16 @@ namespace HastaneBilgiSistemi.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(128, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string FirstName { get; set; }
+            
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(128, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string LastName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -61,6 +72,14 @@ namespace HastaneBilgiSistemi.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "Phone Number")]
+            [StringLength(10, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
+            public string PhoneNumber { get; set; }
+            
+            [Required]
+            public DateTime BirthDate { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,11 +94,25 @@ namespace HastaneBilgiSistemi.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    BirthDate = Input.BirthDate,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    FullName = Input.FirstName + " " + Input.LastName,
+                    NormalizedEmail = Input.Email.ToUpper(),
+                    NormalizedUserName = Input.Email.ToUpper(),
+                    PhoneNumber = Input.PhoneNumber,
+                    EmailConfirmed = true,
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "Client");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
