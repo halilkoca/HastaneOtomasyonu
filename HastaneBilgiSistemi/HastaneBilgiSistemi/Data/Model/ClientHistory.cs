@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HastaneBilgiSistemi.Data.Model
 {
     public class ClientHistory
     {
         public int Id { get; set; }
+        public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int ReservationId { get; set; }
         public int DoctorId { get; set; }
@@ -15,5 +17,6 @@ namespace HastaneBilgiSistemi.Data.Model
         public Doctor Doctor { get; set; }
         public Polyclinic Polyclinic { get; set; }
         public Diseas Diseas { get; set; }
+        public virtual ICollection<ClientHistoryMedication> Medications { get; set; }
     }
 }
