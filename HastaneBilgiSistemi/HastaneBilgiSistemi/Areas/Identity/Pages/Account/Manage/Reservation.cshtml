@@ -1,0 +1,38 @@
+﻿@page
+@model ReservationModel
+@{
+    Layout = "/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+    ViewData["Title"] = "New Reservation";
+    ViewData["ActivePage"] = ManageNavPages.Reservation;
+}
+
+<h5>@ViewData["Title"]</h5>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-4">
+        <form id="history-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.PolyclinicId" class="control-label">Polyclinic</label>
+                        <select asp-for="Input.PolyclinicId" class="form-control" asp-items="Model.PolyclinicSelect"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.DoctorId" class="control-label">Doctor</label>
+                        <select asp-for="Input.DoctorId" class="form-control" asp-items="Model.DoctorSelect"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.StartDate" class="control-label"></label>
+                        <input asp-for="Input.StartDate" class="form-control" />
+                        <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

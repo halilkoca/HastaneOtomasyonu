@@ -1,24 +1,24 @@
-﻿@model List<HastaneBilgiSistemi.Data.Model.Reservation>
-
+﻿@page
+@model HistoryModel
 @{
-    ViewData["Title"] = "Home Page";
+    Layout = "/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+    ViewData["Title"] = "My Reservations";
+    ViewData["ActivePage"] = ManageNavPages.History;
 }
 
-<div class="text-center">
-    <h4 class="display-5">Welcome To TURTEP Hospital</h4>
-</div>
+<h4>@ViewData["Title"]</h4>
 
-<table class="table">
+<table class="table" width="100%">
     <thead>
         <tr>
             <th>Polyclinic</th>
             <th>Doctor</th>
-            <th>Patient</th>
             <th>Date</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Reservations)
         {
         <tr>
             <td>
@@ -28,15 +28,17 @@
                 @Html.DisplayFor(modelItem => item.Doctor.User.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Patient.User.FullName)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Start Examination</a>
-            </td>
+            @*<td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+            </td>*@
         </tr>
         }
     </tbody>
 </table>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
