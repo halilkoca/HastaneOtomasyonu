@@ -43,10 +43,11 @@ namespace HastaneBilgiSistemi.Controllers
 
             var patientHistory = await _context.PatientHistory
                 .Include(c => c.Diseas)
-                .Include(c => c.Doctor)
+                .Include(c => c.Doctor).ThenInclude(x => x.User)
+                .Include(c => c.Patient).ThenInclude(x => x.User)
                 .Include(c => c.Polyclinic)
                 .Include(c => c.Reservation)
-                .Include(c => c.Medications)
+                .Include(c => c.Medications).ThenInclude(m => m.Medication)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (patientHistory == null)
                 return NotFound();
@@ -103,6 +104,11 @@ namespace HastaneBilgiSistemi.Controllers
                 foreach (var item in modell.Medication)
                     med.Add(new PatientHistoryMedication { MedicationId = item, PatientHistoryId = model.Id });
                 await _context.PatientHistoryMedication.AddRangeAsync(med);
+                await _context.SaveChangesAsync();
+
+                var ress = await _context.Reservation.FirstOrDefaultAsync(x => x.Id == modell.ReservationId);
+                ress.IsCompleted = true;
+                _context.Reservation.Update(ress);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

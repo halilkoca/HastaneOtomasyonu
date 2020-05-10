@@ -60,6 +60,7 @@ namespace HastaneBilgiSistemi.Areas.Identity.Pages.Account.Manage
                 .Include(x => x.Doctor).ThenInclude(doc => doc.User)
                 .Where(x => x.Patient.UserId == user.Id)
                 .Where(x => x.StartDate >= DateTime.Now)
+                .Where(x => !x.IsCompleted)
                 .ToListAsync();
         }
 

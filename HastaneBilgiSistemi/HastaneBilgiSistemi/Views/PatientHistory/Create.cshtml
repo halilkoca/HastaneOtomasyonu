@@ -35,9 +35,11 @@
             <div class="form-group">
                 <select asp-for="DiseasId" class="form-control" asp-items="ViewBag.DiseasId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Complaint"></label>
-                <textarea asp-for="Complaint" maxlength="512"></textarea>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Complaint</span>
+                </div>
+                <textarea name="Complaint" class="form-control" aria-label="With textarea" rows="4" maxlength="512"></textarea>
             </div>
         </div>
         <div class="col-md-8">
@@ -58,7 +60,10 @@
         <input name="StartDate" type="hidden" asp-for="StartDate" />
         <input name="ReservationId" type="hidden" asp-for="Reservation.Id" />
         <input name="PatientId" type="hidden" asp-for="Reservation.PatientId" />
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <div class="col-md-4 p-20 m-20">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+
     </div>
 </form>
 

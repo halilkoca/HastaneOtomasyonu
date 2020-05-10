@@ -1,52 +1,125 @@
-﻿@model HastaneBilgiSistemi.Data.Model.PatientHistory
+﻿@model HastaneBilgiSistemi.Data.Model.Patient
 
 @{
     ViewData["Title"] = "Patient Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int historyId = 0;
+    if (ViewContext.HttpContext.Request.Query.ContainsKey("historyId"))
+    {
+        historyId = Convert.ToInt32(ViewContext.HttpContext.Request.Query["historyId"]);
+    }
+
 }
 
-    <h3>Patient Details</h3>
+<style>
+
+    .tableHeight {
+        max-height: 400px;
+        overflow-y: scroll;
+        display: block;
+    }
+
+    .activeRow {
+        background-color: #ddf3dd;
+    }
+
+
+</style>
+
+<h3>Patient Details</h3>
 
 <div>
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Patient.User.FullName)
+            @Html.DisplayNameFor(model => model.User.FullName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Patient.User.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Polyclinic.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Polyclinic.Name)
+            @Html.DisplayFor(model => model.User.FullName)
         </dd>
     </dl>
 </div>
 
-Patient Reservation History
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Medications)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Medications)
-        {
+@if (Model.PatientHistories.Count > 0)
+{
+    <table class="table tableHeight">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Medication.Name)
-                </td>
+                <th>
+                    Diseas
+                </th>
+                <th>
+                    Doctor
+                </th>
+                <th>
+                    Polyclinic
+                </th>
+                <th>
+                    Reservation
+                </th>
+                <th>
+                    Completed At
+                </th>
+                <th>
+                    Complaint
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PatientHistories)
+            {
+                <tr class="@(item.Id == historyId ? "activeRow" : "")">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Diseas.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor.User.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Polyclinic.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reservation.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Complaint)
+                    </td>
+                    <td>
+                        <a href="/Patient/Details/@Model.Id?historyId=@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 
+@if (Model?.PatientHistories?.FirstOrDefault(x => x.Id == historyId)?.Medications?.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Medications
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model?.PatientHistories?.FirstOrDefault(x => x.Id == historyId)?.Medications)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Medication.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 
 <div>

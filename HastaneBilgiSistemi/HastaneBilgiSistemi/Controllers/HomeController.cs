@@ -31,6 +31,7 @@ namespace HastaneBilgiSistemi.Controllers
                 .Include(x => x.Polyclinic)
                 .Include(x => x.Doctor).ThenInclude(doc => doc.User)
                 .Include(x => x.Patient).ThenInclude(doc => doc.User)
+                .Where(x => !x.IsCompleted)
                 .ToListAsync();
             return View(result);
         }

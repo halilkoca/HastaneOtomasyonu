@@ -37,27 +37,43 @@ namespace HastaneBilgiSistemi.Controllers
         }
 
         // GET: Patient/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? historyId)
         {
             if (id == null)
                 return NotFound();
 
-            var ph = await _context.PatientHistory
-                .Include(c => c.Diseas)
-                .Include(c => c.Doctor)
-                .Include(c => c.Polyclinic)
-                .Include(c => c.Reservation)
-                .Include(c => c.Medications)
-                .ToListAsync();
-
-
-            var patient = await _context.Patient
+            var patient = _context.Patient
                 .Include(c => c.User)
+
                 .Include(c => c.PatientHistories)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (patient == null)
+                .ThenInclude(c => c.Diseas)
+
+                .Include(c => c.PatientHistories)
+                .ThenInclude(c => c.Doctor)
+                .ThenInclude(d => d.User)
+
+                .Include(c => c.PatientHistories)
+                .ThenInclude(c => c.Polyclinic)
+
+                .Include(c => c.PatientHistories)
+                .ThenInclude(c => c.Reservation)
+                .AsQueryable();
+
+
+            if (historyId > 0)
+            {
+                patient = patient
+                    .Include(c => c.PatientHistories)
+                    .ThenInclude(c => c.Medications)
+                    .ThenInclude(c => c.Medication);
+            }
+
+            var result = await patient.FirstOrDefaultAsync(m => m.Id == id);
+
+
+            if (result == null)
                 return NotFound();
-            return View(patient);
+            return View(result);
         }
 
         // GET: Patient/Create
