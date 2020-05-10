@@ -61,8 +61,12 @@ namespace HastaneBilgiSistemi.Controllers
         // GET: PatientHistory/Create
         public async Task<IActionResult> Create(int reservationId)
         {
-            
-            var historyy = new HistoryCreateVM { StartDate = DateTime.Now, Reservation = await _context.Reservation.Include(x => x.Patient.User).Include(x => x.Polyclinic).Include(x => x.Doctor).FirstOrDefaultAsync(x => x.Id == reservationId) };
+            var ress = await _context.Reservation
+                .Include(x => x.Polyclinic)
+                .Include(x => x.Patient).ThenInclude(x => x.User)
+                .Include(x => x.Doctor).ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == reservationId);
+            var historyy = new HistoryCreateVM { StartDate = DateTime.Now, Reservation = ress };
             ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Name");
             ViewData["MedicationId"] = _context.Medication.ToList();
             return View(historyy);
@@ -73,7 +77,7 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StartDate,ReservationId,DiseasId,Medication[]")] PatientHistory patientHistory)
+        public async Task<IActionResult> Create([Bind("Id,StartDate,ReservationId,DiseasId,Medication")] HistoryCreateVM modell)
         {
             bool isValidd = true;
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -86,17 +90,31 @@ namespace HastaneBilgiSistemi.Controllers
 
             if (ModelState.IsValid && isValidd)
             {
-                patientHistory.EndDate = DateTime.Now;
-                patientHistory.DoctorId = docc.Id;
-                patientHistory.PolyclinicId = docc.PolyclinicId;
-                _context.Add(patientHistory);
+                var model = new PatientHistory
+                {
+                    DiseasId = modell.DiseasId,
+                    DoctorId = docc.Id,
+                    EndDate = DateTime.Now,
+                    PolyclinicId = docc.PolyclinicId,
+                    ReservationId = modell.ReservationId,
+                    StartDate = modell.StartDate
+                };
+                await _context.PatientHistory.AddAsync(model);
                 await _context.SaveChangesAsync();
+                List<PatientHistoryMedication> med = new List<PatientHistoryMedication>();
+                foreach (var item in modell.Medication)
+                {
+                    med.Add(new PatientHistoryMedication { MedicationId = item, PatientHistoryId = model.Id });
+                }
+                await _context.PatientHistoryMedication.AddRangeAsync(med);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Name");
             ViewData["MedicationId"] = _context.Medication.ToList();
-            return View(patientHistory);
+            return View(modell);
         }
 
         // GET: PatientHistory/Edit/5

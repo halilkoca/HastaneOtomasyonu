@@ -16,26 +16,19 @@
 <h5>Create Examination</h5>
 <hr />
 <dl class="row">
-    <dt class="col-sm-6">
-        @Html.DisplayNameFor(model => model.EndDate)
-        @Html.DisplayFor(model => model.EndDate)
-    </dt>
-    <dd class="col-sm-6">
-        @Html.DisplayFor(model => model.EndDate)
+    <dd class="col-sm-4">
+        Appointment: @Html.DisplayFor(model => model.Reservation.StartDate)
     </dd>
-    <dt class="col-sm-6">
-        @Html.DisplayNameFor(model => model.Reservation)
-    </dt>
-    <dd class="col-sm-6">
-        @Html.DisplayFor(model => model.Reservation.Id)
+    <dd class="col-sm-4">
+        Patient: @Html.DisplayFor(model => model.Reservation.Patient.User.FullName)
     </dd>
-    <dt class="col-sm-6">
-        @Html.DisplayNameFor(model => model.Reservation.DoctorId)
-    </dt>
+    <dd class="col-sm-4">
+        Doc: @Html.DisplayFor(model => model.Reservation.Doctor.User.FullName)
+    </dd>
 </dl>
 <form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-md-4">
             <div class="form-group">
                 <h6>Diseas</h6>
@@ -51,7 +44,7 @@
                 {
                     <div class="col-md-6 float-left overflow-hidden">
                         <label class="control-label">
-                            <input type="checkbox" name="Medication[@item.Id]" />
+                            <input type="checkbox" name="Medication" value="@item.Id" />
                             @item.Name
                         </label>
                     </div>
