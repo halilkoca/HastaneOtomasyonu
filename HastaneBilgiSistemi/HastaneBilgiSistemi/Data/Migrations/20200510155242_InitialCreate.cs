@@ -270,7 +270,8 @@ namespace HastaneBilgiSistemi.Data.Migrations
                     PolyclinicId = table.Column<int>(nullable: false),
                     PatientId = table.Column<int>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false)
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -303,10 +304,12 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
+                    PatientId = table.Column<int>(nullable: false),
                     ReservationId = table.Column<int>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false),
                     DiseasId = table.Column<int>(nullable: false),
-                    PolyclinicId = table.Column<int>(nullable: false)
+                    PolyclinicId = table.Column<int>(nullable: false),
+                    Complaint = table.Column<string>(maxLength: 512, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -321,6 +324,12 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         name: "FK_PatientHistory_Doctor_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_PatientHistory_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
@@ -368,10 +377,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "62d198a8-c9f5-4573-90bb-59fd1f0fc610", "Admin", "ADMIN" },
-                    { 2, "5f9c8ad6-3a8d-44d1-9646-26a60a54c728", "Doctor", "DOCTOR" },
-                    { 3, "6b0c33df-5af2-4646-8140-253267bc428e", "Secretary", "SECRETARY" },
-                    { 4, "277e5e95-9462-43e8-8fee-b6a61d8d0996", "Patient", "PATIENT" }
+                    { 1, "4648aa73-e422-40f5-9f78-f676776be6a0", "Admin", "ADMIN" },
+                    { 2, "cfe87cb9-0131-44e4-b36d-b6f4d060e1cc", "Doctor", "DOCTOR" },
+                    { 3, "b8ee632c-4da9-4ad7-8e1b-ceb5754c8a90", "Secretary", "SECRETARY" },
+                    { 4, "50f7c5b3-1c61-4b33-b8f7-65dc60957841", "Patient", "PATIENT" }
                 });
 
             migrationBuilder.InsertData(
@@ -379,10 +388,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "FullName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "c97ae8e4-3e15-41f8-ab54-489a75dfea1d", "admin@admin.com", true, "Admin", "Admin Admin", "Admin", false, null, "ADMIN@ADMIN.COM", "admin@admin.com", "AQAAAAEAACcQAAAAEKuldFOnq1DcJJpYb0vjhfY0nnm8MOZDLwp99Glz1yc8yAXXi1jt/3kTTdLDch0XuQ==", "5325321234", false, "62c20112-95f3-437c-8d55-056f94a52f19", false, "admin@admin.com" },
-                    { 2, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "d23e9d01-19d1-44db-8ed2-2942354e55c5", "doctor@doctor.com", true, "Rıfat", "Rıfat Yaşar", "Yaşar", false, null, "DOCTOR@DOCTOR.COM", "doctor@doctor.com", "AQAAAAEAACcQAAAAEB8PxSBrpaFBEcsABzSkqRm2Pl38YOD521KvzC0GIEpSaDSwXWws08jIZMGdKkdF+A==", "5325321234", false, "d698a526-4d45-40fa-9f0e-923ae5fc6f32", false, "doctor@doctor.com" },
-                    { 3, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "64d76579-17ad-4670-8fe9-9958825d52f0", "secretary@secretary.com", true, "Ayşe", "Ayşe Gül", "Gül", false, null, "SECRETARY@SECRETARY.COM", "secretary@secretary.com", "AQAAAAEAACcQAAAAEPhXul/SlRcgMCxM3O4dCTGmxpn2T9F7bRyNmIo/QCPgtyuqsEH/8wbF+c+EP2OXDw==", "5325321234", false, "fcdb72ea-70b4-410e-ac69-ee8ae0d9b7e5", false, "secretary@secretary.com" },
-                    { 4, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "e44c7819-9fcb-469a-94fe-6371b757f1aa", "patient@patient.com", true, "Osman", "Osman Oduncu", "Oduncu", false, null, "PATIENT@PATIENT.COM", "patient@patient.com", "AQAAAAEAACcQAAAAEKMFIw7ak/OzLCQHtoCnVLhk59+eiDYV3DTERYjMiELrGZZFwDwRAMInFs5uPM2wAg==", "5325321234", false, "e1da9726-a14e-4b80-bcae-fb9b4fdbb381", false, "patient@patient.com" }
+                    { 1, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "b134deab-1ede-4e1f-8585-39d64498433e", "admin@admin.com", true, "Admin", "Admin Admin", "Admin", false, null, "ADMIN@ADMIN.COM", "admin@admin.com", "AQAAAAEAACcQAAAAEJBPowIQK9FJFbu3O/Zye4ahwaNzQifOIypTX24C/MV+Gfqol6rWqHLZu54zFkcdPA==", "5325321234", false, "4c685e19-962c-4270-9996-fd90226bd799", false, "admin@admin.com" },
+                    { 2, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bac232c1-a40b-4e21-acb9-bd331c8cd72a", "doctor@doctor.com", true, "Rıfat", "Rıfat Yaşar", "Yaşar", false, null, "DOCTOR@DOCTOR.COM", "doctor@doctor.com", "AQAAAAEAACcQAAAAEE4Bb8boopXkoLMmScRxB1HN6B4s2nOejEwnNwOHHP252r/MITtD82PXxdIzO1syJw==", "5325321234", false, "6c9fd469-b2b6-4f5a-aaea-6dd806a0196b", false, "doctor@doctor.com" },
+                    { 3, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "892ce7ec-8772-4e58-aae6-6674c716d4de", "secretary@secretary.com", true, "Ayşe", "Ayşe Gül", "Gül", false, null, "SECRETARY@SECRETARY.COM", "secretary@secretary.com", "AQAAAAEAACcQAAAAEKVjjnfQdlOZc/xHz/ONRoyxCcZGdlaQEFlktRhm9FPzhyMWHGFzhv30ZiCf81SjRQ==", "5325321234", false, "63ececb7-2bcb-4c87-b80e-709ee6bc303e", false, "secretary@secretary.com" },
+                    { 4, 0, new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "66607af6-0659-4396-a9cb-4e7e99ea5281", "patient@patient.com", true, "Osman", "Osman Oduncu", "Oduncu", false, null, "PATIENT@PATIENT.COM", "patient@patient.com", "AQAAAAEAACcQAAAAEKO/vwPz3H1fzbWhjL9F52yZNd94wNnigH5zmXfmfdvKFWM7aPfSzUYss7ekN3N1bg==", "5325321234", false, "15c158ad-9aab-4046-957d-196e7fccd430", false, "patient@patient.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -532,6 +541,11 @@ namespace HastaneBilgiSistemi.Data.Migrations
                 name: "IX_PatientHistory_DoctorId",
                 table: "PatientHistory",
                 column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PatientHistory_PatientId",
+                table: "PatientHistory",
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PatientHistory_PolyclinicId",

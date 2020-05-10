@@ -30,10 +30,14 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-4">
+            <h6>Diseas</h6>
+            <hr />
             <div class="form-group">
-                <h6>Diseas</h6>
-                <hr />
                 <select asp-for="DiseasId" class="form-control" asp-items="ViewBag.DiseasId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Complaint"></label>
+                <textarea asp-for="Complaint" maxlength="512"></textarea>
             </div>
         </div>
         <div class="col-md-8">
@@ -53,6 +57,7 @@
         </div>
         <input name="StartDate" type="hidden" asp-for="StartDate" />
         <input name="ReservationId" type="hidden" asp-for="Reservation.Id" />
+        <input name="PatientId" type="hidden" asp-for="Reservation.PatientId" />
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>

@@ -1,48 +1,54 @@
-﻿@model HastaneBilgiSistemi.Data.Model.PatientHistory
+﻿@model HistoryCreateVM
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Edit Patient History</h4>
+<h5>Create Examination</h5>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+<dl class="row">
+    <dd class="col-sm-4">
+        Appointment: @Html.DisplayFor(model => model.Reservation.StartDate)
+    </dd>
+    <dd class="col-sm-4">
+        Patient: @Html.DisplayFor(model => model.Reservation.Patient.User.FullName)
+    </dd>
+    <dd class="col-sm-4">
+        Doc: @Html.DisplayFor(model => model.Reservation.Doctor.User.FullName)
+    </dd>
+</dl>
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReservationId" class="control-label"></label>
-                <select asp-for="ReservationId" class="form-control" asp-items="ViewBag.ReservationId"></select>
-                <span asp-validation-for="ReservationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoctorId" class="control-label"></label>
-                <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.DoctorId"></select>
-                <span asp-validation-for="DoctorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiseasId" class="control-label"></label>
+                <h6>Diseas</h6>
+                <hr />
                 <select asp-for="DiseasId" class="form-control" asp-items="ViewBag.DiseasId"></select>
-                <span asp-validation-for="DiseasId" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-8">
             <div class="form-group">
-                <label asp-for="PolyclinicId" class="control-label"></label>
-                <select asp-for="PolyclinicId" class="form-control" asp-items="ViewBag.PolyclinicId"></select>
-                <span asp-validation-for="PolyclinicId" class="text-danger"></span>
+                <h6>Medication</h6>
+                <hr />
+                @foreach (var item in ViewBag.MedicationId)
+                {
+                    <div class="col-md-6 float-left overflow-hidden">
+                        <label class="control-label">
+                            <input type="checkbox" name="Medication" value="@item.Id" />
+                            @item.Name
+                        </label>
+                    </div>
+                }
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <input name="StartDate" type="hidden" asp-for="StartDate" />
+        <input name="ReservationId" type="hidden" asp-for="Reservation.Id" />
+        <input name="PatientId" type="hidden" asp-for="Reservation.PatientId" />
+        <input type="submit" value="Create" class="btn btn-primary" />
     </div>
-</div>
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>

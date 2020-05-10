@@ -7,6 +7,8 @@ namespace HastaneBilgiSistemi.Models
 {
     public class HistoryCreateVM
     {
+        [MaxLength(512)]
+        public string Complaint { get; set; } // şikayet
         public Reservation Reservation { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
@@ -18,6 +20,7 @@ namespace HastaneBilgiSistemi.Models
         [Required(ErrorMessage = "Reservation Does Not Exist")]
         public int ReservationId { get; set; }
         public List<int> Medication { get; set; }
-
+        [Required]
+        public int PatientId { get; set; }
     }
 }

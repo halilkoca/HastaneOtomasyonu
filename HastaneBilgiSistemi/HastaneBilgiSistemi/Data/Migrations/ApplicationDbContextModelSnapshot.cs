@@ -51,28 +51,28 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "62d198a8-c9f5-4573-90bb-59fd1f0fc610",
+                            ConcurrencyStamp = "4648aa73-e422-40f5-9f78-f676776be6a0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5f9c8ad6-3a8d-44d1-9646-26a60a54c728",
+                            ConcurrencyStamp = "cfe87cb9-0131-44e4-b36d-b6f4d060e1cc",
                             Name = "Doctor",
                             NormalizedName = "DOCTOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "6b0c33df-5af2-4646-8140-253267bc428e",
+                            ConcurrencyStamp = "b8ee632c-4da9-4ad7-8e1b-ceb5754c8a90",
                             Name = "Secretary",
                             NormalizedName = "SECRETARY"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "277e5e95-9462-43e8-8fee-b6a61d8d0996",
+                            ConcurrencyStamp = "50f7c5b3-1c61-4b33-b8f7-65dc60957841",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -189,7 +189,7 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "c97ae8e4-3e15-41f8-ab54-489a75dfea1d",
+                            ConcurrencyStamp = "b134deab-1ede-4e1f-8585-39d64498433e",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -198,10 +198,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "admin@admin.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKuldFOnq1DcJJpYb0vjhfY0nnm8MOZDLwp99Glz1yc8yAXXi1jt/3kTTdLDch0XuQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJBPowIQK9FJFbu3O/Zye4ahwaNzQifOIypTX24C/MV+Gfqol6rWqHLZu54zFkcdPA==",
                             PhoneNumber = "5325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "62c20112-95f3-437c-8d55-056f94a52f19",
+                            SecurityStamp = "4c685e19-962c-4270-9996-fd90226bd799",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         },
@@ -210,7 +210,7 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "d23e9d01-19d1-44db-8ed2-2942354e55c5",
+                            ConcurrencyStamp = "bac232c1-a40b-4e21-acb9-bd331c8cd72a",
                             Email = "doctor@doctor.com",
                             EmailConfirmed = true,
                             FirstName = "Rıfat",
@@ -219,10 +219,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DOCTOR@DOCTOR.COM",
                             NormalizedUserName = "doctor@doctor.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEB8PxSBrpaFBEcsABzSkqRm2Pl38YOD521KvzC0GIEpSaDSwXWws08jIZMGdKkdF+A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEE4Bb8boopXkoLMmScRxB1HN6B4s2nOejEwnNwOHHP252r/MITtD82PXxdIzO1syJw==",
                             PhoneNumber = "5325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d698a526-4d45-40fa-9f0e-923ae5fc6f32",
+                            SecurityStamp = "6c9fd469-b2b6-4f5a-aaea-6dd806a0196b",
                             TwoFactorEnabled = false,
                             UserName = "doctor@doctor.com"
                         },
@@ -231,7 +231,7 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             Id = 3,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "64d76579-17ad-4670-8fe9-9958825d52f0",
+                            ConcurrencyStamp = "892ce7ec-8772-4e58-aae6-6674c716d4de",
                             Email = "secretary@secretary.com",
                             EmailConfirmed = true,
                             FirstName = "Ayşe",
@@ -240,10 +240,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SECRETARY@SECRETARY.COM",
                             NormalizedUserName = "secretary@secretary.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPhXul/SlRcgMCxM3O4dCTGmxpn2T9F7bRyNmIo/QCPgtyuqsEH/8wbF+c+EP2OXDw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKVjjnfQdlOZc/xHz/ONRoyxCcZGdlaQEFlktRhm9FPzhyMWHGFzhv30ZiCf81SjRQ==",
                             PhoneNumber = "5325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fcdb72ea-70b4-410e-ac69-ee8ae0d9b7e5",
+                            SecurityStamp = "63ececb7-2bcb-4c87-b80e-709ee6bc303e",
                             TwoFactorEnabled = false,
                             UserName = "secretary@secretary.com"
                         },
@@ -252,7 +252,7 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             Id = 4,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "e44c7819-9fcb-469a-94fe-6371b757f1aa",
+                            ConcurrencyStamp = "66607af6-0659-4396-a9cb-4e7e99ea5281",
                             Email = "patient@patient.com",
                             EmailConfirmed = true,
                             FirstName = "Osman",
@@ -261,10 +261,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PATIENT@PATIENT.COM",
                             NormalizedUserName = "patient@patient.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKMFIw7ak/OzLCQHtoCnVLhk59+eiDYV3DTERYjMiELrGZZFwDwRAMInFs5uPM2wAg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKO/vwPz3H1fzbWhjL9F52yZNd94wNnigH5zmXfmfdvKFWM7aPfSzUYss7ekN3N1bg==",
                             PhoneNumber = "5325321234",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e1da9726-a14e-4b80-bcae-fb9b4fdbb381",
+                            SecurityStamp = "15c158ad-9aab-4046-957d-196e7fccd430",
                             TwoFactorEnabled = false,
                             UserName = "patient@patient.com"
                         });
@@ -556,6 +556,10 @@ namespace HastaneBilgiSistemi.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Complaint")
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
+
                     b.Property<int>("DiseasId")
                         .HasColumnType("int");
 
@@ -564,6 +568,9 @@ namespace HastaneBilgiSistemi.Data.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PolyclinicId")
                         .HasColumnType("int");
@@ -579,6 +586,8 @@ namespace HastaneBilgiSistemi.Data.Migrations
                     b.HasIndex("DiseasId");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
 
                     b.HasIndex("PolyclinicId");
 
@@ -737,6 +746,9 @@ namespace HastaneBilgiSistemi.Data.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
@@ -867,6 +879,12 @@ namespace HastaneBilgiSistemi.Data.Migrations
                     b.HasOne("HastaneBilgiSistemi.Data.Model.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HastaneBilgiSistemi.Data.Model.Patient", "Patient")
+                        .WithMany("PatientHistories")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
