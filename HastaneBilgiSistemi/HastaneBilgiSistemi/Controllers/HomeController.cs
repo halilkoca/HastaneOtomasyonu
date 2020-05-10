@@ -30,7 +30,7 @@ namespace HastaneBilgiSistemi.Controllers
             var result = await _context.Reservation
                 .Include(x => x.Polyclinic)
                 .Include(x => x.Doctor).ThenInclude(doc => doc.User)
-                .Include(x => x.Client).ThenInclude(doc => doc.User)
+                .Include(x => x.Patient).ThenInclude(doc => doc.User)
                 .ToListAsync();
             return View(result);
         }

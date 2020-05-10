@@ -17,12 +17,12 @@ namespace HastaneBilgiSistemi.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger<ClientController> _logger;
+        private readonly ILogger<PatientController> _logger;
 
         public SecretaryController(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
-            ILogger<ClientController> logger
+            ILogger<PatientController> logger
             )
         {
             _userManager = userManager;
@@ -84,7 +84,7 @@ namespace HastaneBilgiSistemi.Controllers
                 {
                     _logger.LogInformation("Secretary created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "Client");
+                    await _userManager.AddToRoleAsync(user, Roles.Patient.ToString());
                     await _context.Secretary.AddAsync(new Secretary { UserId = user.Id });
                     await _context.SaveChangesAsync();
                 }
@@ -104,18 +104,18 @@ namespace HastaneBilgiSistemi.Controllers
         {
             if (id == null)
                 return NotFound();
-            var client = await _context.Secretary.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
-            if (client == null)
+            var patientt = await _context.Secretary.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            if (patientt == null)
                 return NotFound();
 
             return View(new UserUpdateVM
             {
                 Id = (int)id,
-                BirthDate = client.User.BirthDate,
-                Email = client.User.Email,
-                FirstName = client.User.FirstName,
-                LastName = client.User.LastName,
-                PhoneNumber = client.User.PhoneNumber
+                BirthDate = patientt.User.BirthDate,
+                Email = patientt.User.Email,
+                FirstName = patientt.User.FirstName,
+                LastName = patientt.User.LastName,
+                PhoneNumber = patientt.User.PhoneNumber
             });
         }
 
@@ -136,7 +136,7 @@ namespace HastaneBilgiSistemi.Controllers
                     var secretaryy = await _context.Secretary.FirstOrDefaultAsync(x => x.Id == userr.Id);
                     if (secretaryy == null)
                     {
-                        ModelState.AddModelError(string.Empty, "Client Can Not Find");
+                        ModelState.AddModelError(string.Empty, "Patient Can Not Find");
                         return View(userr);
                     }
 
@@ -172,10 +172,10 @@ namespace HastaneBilgiSistemi.Controllers
             if (id == null)
                 return NotFound();
 
-            var client = await _context.Secretary.Include(c => c.User).FirstOrDefaultAsync(m => m.Id == id);
-            if (client == null)
+            var patientt = await _context.Secretary.Include(c => c.User).FirstOrDefaultAsync(m => m.Id == id);
+            if (patientt == null)
                 return NotFound();
-            return View(client);
+            return View(patientt);
         }
 
         // POST: Secretary/Delete/5
@@ -189,7 +189,7 @@ namespace HastaneBilgiSistemi.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == secretaryy.UserId);
             if (secretaryy == null)
                 return NotFound();
-            _context.UserRoles.Remove(new ApplicationUserRole { UserId = secretaryy.UserId, RoleId = (int)Roles.Client });
+            _context.UserRoles.Remove(new ApplicationUserRole { UserId = secretaryy.UserId, RoleId = (int)Roles.Patient });
             _context.Users.Remove(user);
             _context.Secretary.Remove(secretaryy);
             await _context.SaveChangesAsync();

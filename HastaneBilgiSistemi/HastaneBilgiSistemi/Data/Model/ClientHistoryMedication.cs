@@ -1,12 +1,12 @@
 ﻿namespace HastaneBilgiSistemi.Data.Model
 {
-    public class ClientHistoryMedication
+    public class PatientHistoryMedication
     {
         public int Id { get; set; }
-        public int ClientHistoryId { get; set; }
+        public int PatientHistoryId { get; set; }
         public int MedicationId { get; set; }
 
-        public ClientHistory ClientHistory { get; set; }
+        public PatientHistory PatientHistory { get; set; }
         public Medication Medication { get; set; }
     }
 }

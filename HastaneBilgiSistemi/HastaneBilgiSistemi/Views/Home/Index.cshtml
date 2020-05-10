@@ -13,7 +13,7 @@
         <tr>
             <th>Polyclinic</th>
             <th>Doctor</th>
-            <th>Client</th>
+            <th>Patient</th>
             <th>Date</th>
             <th></th>
         </tr>
@@ -29,7 +29,7 @@
                 @Html.DisplayFor(modelItem => item.Doctor.User.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Client.User.FullName)
+                @Html.DisplayFor(modelItem => item.Patient.User.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)

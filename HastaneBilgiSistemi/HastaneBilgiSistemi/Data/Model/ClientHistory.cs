@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HastaneBilgiSistemi.Data.Model
 {
-    public class ClientHistory
+    public class PatientHistory
     {
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
@@ -17,6 +17,6 @@ namespace HastaneBilgiSistemi.Data.Model
         public Doctor Doctor { get; set; }
         public Polyclinic Polyclinic { get; set; }
         public Diseas Diseas { get; set; }
-        public virtual ICollection<ClientHistoryMedication> Medications { get; set; }
+        public virtual ICollection<PatientHistoryMedication> Medications { get; set; }
     }
 }

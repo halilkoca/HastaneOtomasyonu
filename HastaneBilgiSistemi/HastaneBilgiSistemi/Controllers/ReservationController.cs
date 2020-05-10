@@ -25,7 +25,7 @@ namespace HastaneBilgiSistemi.Controllers
             var result = await _context.Reservation
                 .Include(x => x.Polyclinic)
                 .Include(x => x.Doctor).ThenInclude(doc => doc.User)
-                .Include(x => x.Client).ThenInclude(doc => doc.User)
+                .Include(x => x.Patient).ThenInclude(doc => doc.User)
                 .ToListAsync();
             return View(result);
         }
@@ -37,7 +37,7 @@ namespace HastaneBilgiSistemi.Controllers
                 return NotFound();
             var reservation = await _context.Reservation
                 .Include(x => x.Polyclinic)
-                .Include(r => r.Client).ThenInclude(c => c.User)
+                .Include(r => r.Patient).ThenInclude(c => c.User)
                 .Include(r => r.Doctor).ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
@@ -49,7 +49,7 @@ namespace HastaneBilgiSistemi.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["PolyclinicId"] = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
-            ViewData["ClientId"] = new SelectList(await _context.Client.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
+            ViewData["PatientId"] = new SelectList(await _context.Patient.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             ViewData["DoctorId"] = new SelectList(await _context.Doctor.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             return View();
         }
@@ -59,7 +59,7 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PolyclinicId,ClientId,DoctorId,StartDate")] Reservation reservation)
+        public async Task<IActionResult> Create([Bind("Id,PolyclinicId,PatientId,DoctorId,StartDate")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace HastaneBilgiSistemi.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PolyclinicId"] = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
-            ViewData["ClientId"] = new SelectList(await _context.Client.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
+            ViewData["PatientId"] = new SelectList(await _context.Patient.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             ViewData["DoctorId"] = new SelectList(await _context.Doctor.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             return View(reservation);
         }
@@ -82,7 +82,7 @@ namespace HastaneBilgiSistemi.Controllers
             if (reservation == null)
                 return NotFound();
             ViewData["PolyclinicId"] = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
-            ViewData["ClientId"] = new SelectList(await _context.Client.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
+            ViewData["PatientId"] = new SelectList(await _context.Patient.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             ViewData["DoctorId"] = new SelectList(await _context.Doctor.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             return View(reservation);
         }
@@ -92,7 +92,7 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PolyclinicId,ClientId,DoctorId,StartDate")] Reservation reservation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PolyclinicId,PatientId,DoctorId,StartDate")] Reservation reservation)
         {
             if (id != reservation.Id)
             {
@@ -120,7 +120,7 @@ namespace HastaneBilgiSistemi.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PolyclinicId"] = new SelectList(await _context.Polyclinic.ToListAsync(), "Id", "Name");
-            ViewData["ClientId"] = new SelectList(await _context.Client.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
+            ViewData["PatientId"] = new SelectList(await _context.Patient.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             ViewData["DoctorId"] = new SelectList(await _context.Doctor.Include(a => a.User).ToListAsync(), "Id", "User.FullName");
             return View(reservation);
         }

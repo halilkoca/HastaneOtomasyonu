@@ -17,9 +17,9 @@ namespace HastaneBilgiSistemi.Data
         {
         }
 
-        public DbSet<Client> Client { get; set; }
-        public DbSet<ClientHistory> ClientHistory { get; set; }
-        public DbSet<ClientHistoryMedication> ClientHistoryMedication { get; set; }
+        public DbSet<Patient> Patient { get; set; }
+        public DbSet<PatientHistory> PatientHistory { get; set; }
+        public DbSet<PatientHistoryMedication> PatientHistoryMedication { get; set; }
         public DbSet<Diseas> Diseas { get; set; }
         public DbSet<Doctor> Doctor { get; set; }
         public DbSet<Medication> Medication { get; set; }
@@ -68,7 +68,7 @@ namespace HastaneBilgiSistemi.Data
             var r1 = new ApplicationRole { Id = 1, Name = "Admin", NormalizedName = "ADMIN" };
             var r2 = new ApplicationRole { Id = 2, Name = "Doctor", NormalizedName = "DOCTOR" };
             var r3 = new ApplicationRole { Id = 3, Name = "Secretary", NormalizedName = "SECRETARY" };
-            var r4 = new ApplicationRole { Id = 4, Name = "Client", NormalizedName = "CLIENT" };
+            var r4 = new ApplicationRole { Id = 4, Name = "Patient", NormalizedName = "PATIENT" };
             modelBuilder.Entity<ApplicationRole>().HasData(r1, r2, r3, r4);
 
             var user = new ApplicationUser();
@@ -76,7 +76,7 @@ namespace HastaneBilgiSistemi.Data
             var u1 = new ApplicationUser { Id = 1, FirstName = "Admin", LastName = "Admin", FullName = "Admin Admin", BirthDate = new DateTime(1955,1,1), UserName = "admin@admin.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "ADMIN@ADMIN.COM", Email = "admin@admin.com", EmailConfirmed = true, NormalizedUserName = "admin@admin.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "5325321234" };
             var u2 = new ApplicationUser { Id = 2, FirstName = "Rıfat", LastName = "Yaşar", FullName = "Rıfat Yaşar", BirthDate = new DateTime(1955, 1, 1), UserName = "doctor@doctor.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "DOCTOR@DOCTOR.COM", Email = "doctor@doctor.com", EmailConfirmed = true, NormalizedUserName = "doctor@doctor.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "5325321234" };
             var u3 = new ApplicationUser { Id = 3, FirstName = "Ayşe", LastName = "Gül", FullName = "Ayşe Gül", BirthDate = new DateTime(1955, 1, 1), UserName = "secretary@secretary.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "SECRETARY@SECRETARY.COM", Email = "secretary@secretary.com", EmailConfirmed = true, NormalizedUserName = "secretary@secretary.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "5325321234" };
-            var u4 = new ApplicationUser { Id = 4, FirstName = "Osman", LastName = "Oduncu", FullName = "Osman Oduncu", BirthDate = new DateTime(1955, 1, 1), UserName = "client@client.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "CLIENT@CLIENT.COM", Email = "client@client.com", EmailConfirmed = true, NormalizedUserName = "client@client.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "5325321234" };
+            var u4 = new ApplicationUser { Id = 4, FirstName = "Osman", LastName = "Oduncu", FullName = "Osman Oduncu", BirthDate = new DateTime(1955, 1, 1), UserName = "patient@patient.com", SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = "PATIENT@PATIENT.COM", Email = "patient@patient.com", EmailConfirmed = true, NormalizedUserName = "patient@patient.com", PasswordHash = hasher.HashPassword(user, "a.A123"), PhoneNumber = "5325321234" };
             modelBuilder.Entity<ApplicationUser>().HasData(u1, u2, u3, u4);
 
             modelBuilder.Entity<ApplicationUserRole>().HasData(
@@ -127,8 +127,8 @@ namespace HastaneBilgiSistemi.Data
                 new Secretary { Id = 1, UserId = u3.Id }
             );
 
-            modelBuilder.Entity<Client>().HasData(
-                new Client { Id = 1, UserId = u4.Id }
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient { Id = 1, UserId = u4.Id }
             );
 
             modelBuilder.Entity<Diseas>().HasData(

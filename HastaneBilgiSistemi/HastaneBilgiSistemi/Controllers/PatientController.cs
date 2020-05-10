@@ -12,16 +12,16 @@ using System;
 
 namespace HastaneBilgiSistemi.Controllers
 {
-    public class ClientController : Controller
+    public class PatientController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger<ClientController> _logger;
+        private readonly ILogger<PatientController> _logger;
 
-        public ClientController(
+        public PatientController(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
-            ILogger<ClientController> logger
+            ILogger<PatientController> logger
             )
         {
             _userManager = userManager;
@@ -30,32 +30,32 @@ namespace HastaneBilgiSistemi.Controllers
             _logger = logger;
         }
 
-        // GET: Client
+        // GET: Patient
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Client.Include(c => c.User).ToListAsync());
+            return View(await _context.Patient.Include(c => c.User).ToListAsync());
         }
 
-        // GET: Client/Details/5
+        // GET: Patient/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
                 return NotFound();
-            var client = await _context.Client
+            var patient = await _context.Patient
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (client == null)
+            if (patient == null)
                 return NotFound();
-            return View(client);
+            return View(patient);
         }
 
-        // GET: Client/Create
+        // GET: Patient/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Client/Create
+        // POST: Patient/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -81,10 +81,10 @@ namespace HastaneBilgiSistemi.Controllers
                 var result = await _userManager.CreateAsync(user, userr.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("Client created a new account with password.");
+                    _logger.LogInformation("Patient created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "Client");
-                    await _context.Client.AddAsync(new Client { UserId = user.Id });
+                    await _userManager.AddToRoleAsync(user, Roles.Patient.ToString());
+                    await _context.Patient.AddAsync(new Patient { UserId = user.Id });
                     await _context.SaveChangesAsync();
                 }
 
@@ -98,27 +98,27 @@ namespace HastaneBilgiSistemi.Controllers
             return View(userr);
         }
 
-        // GET: Client/Edit/5
+        // GET: Patient/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return NotFound();
-            var client = await _context.Client.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
-            if (client == null)
+            var patient = await _context.Patient.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            if (patient == null)
                 return NotFound();
 
             return View(new UserUpdateVM
             {
                 Id = (int)id,
-                BirthDate = client.User.BirthDate,
-                Email = client.User.Email,
-                FirstName = client.User.FirstName,
-                LastName = client.User.LastName,
-                PhoneNumber = client.User.PhoneNumber
+                BirthDate = patient.User.BirthDate,
+                Email = patient.User.Email,
+                FirstName = patient.User.FirstName,
+                LastName = patient.User.LastName,
+                PhoneNumber = patient.User.PhoneNumber
             });
         }
 
-        // POST: Client/Edit/5
+        // POST: Patient/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -132,14 +132,14 @@ namespace HastaneBilgiSistemi.Controllers
             {
                 try
                 {
-                    var clientt = await _context.Client.FirstOrDefaultAsync(x => x.Id == userr.Id);
-                    if (clientt == null)
+                    var patientt = await _context.Patient.FirstOrDefaultAsync(x => x.Id == userr.Id);
+                    if (patientt == null)
                     {
-                        ModelState.AddModelError(string.Empty, "Client Can Not Find");
+                        ModelState.AddModelError(string.Empty, "Patient Can Not Find");
                         return View(userr);
                     }
 
-                    var user = await _userManager.FindByIdAsync(clientt.UserId.ToString());
+                    var user = await _userManager.FindByIdAsync(patientt.UserId.ToString());
                     if (user == null)
                     {
                         ModelState.AddModelError(string.Empty, "User Can Not Find");
@@ -165,33 +165,33 @@ namespace HastaneBilgiSistemi.Controllers
             return View(userr);
         }
 
-        // GET: Client/Delete/5
+        // GET: Patient/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var client = await _context.Client.Include(c => c.User).FirstOrDefaultAsync(m => m.Id == id);
-            if (client == null)
+            var patient = await _context.Patient.Include(c => c.User).FirstOrDefaultAsync(m => m.Id == id);
+            if (patient == null)
                 return NotFound();
-            return View(client);
+            return View(patient);
         }
 
-        // POST: Client/Delete/5
+        // POST: Patient/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Client.FirstOrDefaultAsync(x => x.Id == id);
-            if (client == null)
+            var patient = await _context.Patient.FirstOrDefaultAsync(x => x.Id == id);
+            if (patient == null)
                 return NotFound();
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == client.UserId);
-            if (client == null)
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == patient.UserId);
+            if (patient == null)
                 return NotFound();
 
-            _context.UserRoles.Remove(new ApplicationUserRole { UserId = client.UserId, RoleId = (int)Roles.Client });
+            _context.UserRoles.Remove(new ApplicationUserRole { UserId = patient.UserId, RoleId = (int)Roles.Patient });
             _context.Users.Remove(user);
-            _context.Client.Remove(client);
+            _context.Patient.Remove(patient);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

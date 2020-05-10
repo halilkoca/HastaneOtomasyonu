@@ -82,7 +82,7 @@ namespace HastaneBilgiSistemi.Controllers
                 {
                     _logger.LogInformation("Doctor created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "Doctor");
+                    await _userManager.AddToRoleAsync(user, Roles.Doctor.ToString());
                     await _context.Doctor.AddAsync(new Doctor { UserId = user.Id, PolyclinicId = userr.PolyclinicId });
                     await _context.SaveChangesAsync();
                 }

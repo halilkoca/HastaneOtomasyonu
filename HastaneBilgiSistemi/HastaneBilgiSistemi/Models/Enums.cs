@@ -4,6 +4,6 @@
     {
         Doctor=2,
         Secretary,
-        Client
+        Patient
     }
 }

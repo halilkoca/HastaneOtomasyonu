@@ -6,12 +6,12 @@ namespace HastaneBilgiSistemi.Data.Model
     {
         public int Id { get; set; }
         public int PolyclinicId { get; set; }
-        public int ClientId { get; set; }
+        public int PatientId { get; set; }
         public int DoctorId { get; set; }
         public DateTime StartDate { get; set; }
 
         public Polyclinic Polyclinic { get; set; }
         public Doctor Doctor { get; set; }
-        public Client Client { get; set; }
+        public Patient Patient { get; set; }
     }
 }

@@ -10,23 +10,23 @@ using HastaneBilgiSistemi.Data.Model;
 
 namespace HastaneBilgiSistemi.Controllers
 {
-    public class ClientHistoryController : Controller
+    public class PatientHistoryController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ClientHistoryController(ApplicationDbContext context)
+        public PatientHistoryController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ClientHistory
+        // GET: PatientHistory
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ClientHistory.Include(c => c.Diseas).Include(c => c.Doctor).Include(c => c.Polyclinic).Include(c => c.Reservation);
+            var applicationDbContext = _context.PatientHistory.Include(c => c.Diseas).Include(c => c.Doctor).Include(c => c.Polyclinic).Include(c => c.Reservation);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: ClientHistory/Details/5
+        // GET: PatientHistory/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,21 +34,21 @@ namespace HastaneBilgiSistemi.Controllers
                 return NotFound();
             }
 
-            var clientHistory = await _context.ClientHistory
+            var patientHistory = await _context.PatientHistory
                 .Include(c => c.Diseas)
                 .Include(c => c.Doctor)
                 .Include(c => c.Polyclinic)
                 .Include(c => c.Reservation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (clientHistory == null)
+            if (patientHistory == null)
             {
                 return NotFound();
             }
 
-            return View(clientHistory);
+            return View(patientHistory);
         }
 
-        // GET: ClientHistory/Create
+        // GET: PatientHistory/Create
         public IActionResult Create()
         {
             ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id");
@@ -58,27 +58,27 @@ namespace HastaneBilgiSistemi.Controllers
             return View();
         }
 
-        // POST: ClientHistory/Create
+        // POST: PatientHistory/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EndDate,ReservationId,DoctorId,DiseasId,PolyclinicId")] ClientHistory clientHistory)
+        public async Task<IActionResult> Create([Bind("Id,EndDate,ReservationId,DoctorId,DiseasId,PolyclinicId")] PatientHistory patientHistory)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(clientHistory);
+                _context.Add(patientHistory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", clientHistory.DiseasId);
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", clientHistory.DoctorId);
-            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", clientHistory.PolyclinicId);
-            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", clientHistory.ReservationId);
-            return View(clientHistory);
+            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", patientHistory.DiseasId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", patientHistory.DoctorId);
+            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", patientHistory.PolyclinicId);
+            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", patientHistory.ReservationId);
+            return View(patientHistory);
         }
 
-        // GET: ClientHistory/Edit/5
+        // GET: PatientHistory/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,26 +86,26 @@ namespace HastaneBilgiSistemi.Controllers
                 return NotFound();
             }
 
-            var clientHistory = await _context.ClientHistory.FindAsync(id);
-            if (clientHistory == null)
+            var patientHistory = await _context.PatientHistory.FindAsync(id);
+            if (patientHistory == null)
             {
                 return NotFound();
             }
-            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", clientHistory.DiseasId);
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", clientHistory.DoctorId);
-            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", clientHistory.PolyclinicId);
-            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", clientHistory.ReservationId);
-            return View(clientHistory);
+            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", patientHistory.DiseasId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", patientHistory.DoctorId);
+            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", patientHistory.PolyclinicId);
+            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", patientHistory.ReservationId);
+            return View(patientHistory);
         }
 
-        // POST: ClientHistory/Edit/5
+        // POST: PatientHistory/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EndDate,ReservationId,DoctorId,DiseasId,PolyclinicId")] ClientHistory clientHistory)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EndDate,ReservationId,DoctorId,DiseasId,PolyclinicId")] PatientHistory patientHistory)
         {
-            if (id != clientHistory.Id)
+            if (id != patientHistory.Id)
             {
                 return NotFound();
             }
@@ -114,12 +114,12 @@ namespace HastaneBilgiSistemi.Controllers
             {
                 try
                 {
-                    _context.Update(clientHistory);
+                    _context.Update(patientHistory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientHistoryExists(clientHistory.Id))
+                    if (!PatientHistoryExists(patientHistory.Id))
                     {
                         return NotFound();
                     }
@@ -130,14 +130,14 @@ namespace HastaneBilgiSistemi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", clientHistory.DiseasId);
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", clientHistory.DoctorId);
-            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", clientHistory.PolyclinicId);
-            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", clientHistory.ReservationId);
-            return View(clientHistory);
+            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", patientHistory.DiseasId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", patientHistory.DoctorId);
+            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", patientHistory.PolyclinicId);
+            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", patientHistory.ReservationId);
+            return View(patientHistory);
         }
 
-        // GET: ClientHistory/Delete/5
+        // GET: PatientHistory/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,34 +145,34 @@ namespace HastaneBilgiSistemi.Controllers
                 return NotFound();
             }
 
-            var clientHistory = await _context.ClientHistory
+            var patientHistory = await _context.PatientHistory
                 .Include(c => c.Diseas)
                 .Include(c => c.Doctor)
                 .Include(c => c.Polyclinic)
                 .Include(c => c.Reservation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (clientHistory == null)
+            if (patientHistory == null)
             {
                 return NotFound();
             }
 
-            return View(clientHistory);
+            return View(patientHistory);
         }
 
-        // POST: ClientHistory/Delete/5
+        // POST: PatientHistory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var clientHistory = await _context.ClientHistory.FindAsync(id);
-            _context.ClientHistory.Remove(clientHistory);
+            var patientHistory = await _context.PatientHistory.FindAsync(id);
+            _context.PatientHistory.Remove(patientHistory);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientHistoryExists(int id)
+        private bool PatientHistoryExists(int id)
         {
-            return _context.ClientHistory.Any(e => e.Id == id);
+            return _context.PatientHistory.Any(e => e.Id == id);
         }
     }
 }
