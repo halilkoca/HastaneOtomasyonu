@@ -40,18 +40,12 @@ namespace HastaneBilgiSistemi.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
-
             var client = await _context.Client
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
-            {
                 return NotFound();
-            }
-
             return View(client);
         }
 

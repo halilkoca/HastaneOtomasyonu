@@ -7,23 +7,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HastaneBilgiSistemi.Data;
 using HastaneBilgiSistemi.Data.Model;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using HastaneBilgiSistemi.Models;
 
 namespace HastaneBilgiSistemi.Controllers
 {
     public class SecretaryController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<ClientController> _logger;
 
-        public SecretaryController(ApplicationDbContext context)
+        public SecretaryController(
+            UserManager<ApplicationUser> userManager,
+            ApplicationDbContext context,
+            ILogger<ClientController> logger
+            )
         {
+            _userManager = userManager;
+
             _context = context;
+            _logger = logger;
         }
 
         // GET: Secretary
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Secretary.Include(s => s.User);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Secretary.Include(c => c.User).ToListAsync());
         }
 
         // GET: Secretary/Details/5
@@ -42,7 +53,6 @@ namespace HastaneBilgiSistemi.Controllers
         // GET: Secretary/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
             return View();
         }
 
@@ -51,33 +61,62 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId")] Secretary secretary)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,PhoneNumber,BirthDate,Email,Password,ConfirmPassword")] UserRegisterVM userr)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(secretary);
-                await _context.SaveChangesAsync();
+                var user = new ApplicationUser
+                {
+                    FirstName = userr.FirstName,
+                    LastName = userr.LastName,
+                    FullName = userr.FirstName + " " + userr.LastName,
+                    UserName = userr.Email,
+                    NormalizedUserName = userr.Email.ToUpper(),
+                    Email = userr.Email,
+                    NormalizedEmail = userr.Email.ToUpper(),
+                    BirthDate = userr.BirthDate,
+                    PhoneNumber = userr.PhoneNumber,
+                    EmailConfirmed = true,
+                };
+
+                var result = await _userManager.CreateAsync(user, userr.Password);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Secretary created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "Client");
+                    await _context.Secretary.AddAsync(new Secretary { UserId = user.Id });
+                    await _context.SaveChangesAsync();
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
-            return View(secretary);
+            return View(userr);
         }
 
         // GET: Secretary/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
+            var client = await _context.Secretary.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            if (client == null)
+                return NotFound();
 
-            var secretary = await _context.Secretary.FindAsync(id);
-            if (secretary == null)
+            return View(new UserUpdateVM
             {
-                return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", secretary.UserId);
-            return View(secretary);
+                Id = (int)id,
+                BirthDate = client.User.BirthDate,
+                Email = client.User.Email,
+                FirstName = client.User.FirstName,
+                LastName = client.User.LastName,
+                PhoneNumber = client.User.PhoneNumber
+            });
         }
 
         // POST: Secretary/Edit/5
@@ -85,54 +124,58 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId")] Secretary secretary)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,PhoneNumber,BirthDate,Email")] UserUpdateVM userr)
         {
-            if (id != secretary.Id)
-            {
+            if (id != userr.Id)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(secretary);
-                    await _context.SaveChangesAsync();
+                    var secretaryy = await _context.Secretary.FirstOrDefaultAsync(x => x.Id == userr.Id);
+                    if (secretaryy == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Client Can Not Find");
+                        return View(userr);
+                    }
+
+                    var user = await _userManager.FindByIdAsync(secretaryy.UserId.ToString());
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "User Can Not Find");
+                        return View(userr);
+                    }
+                    user.FirstName = userr.FirstName;
+                    user.LastName = userr.LastName;
+                    user.FullName = userr.FirstName + " " + userr.LastName;
+                    user.UserName = userr.Email;
+                    user.NormalizedUserName = userr.Email.ToUpper();
+                    user.Email = userr.Email;
+                    user.NormalizedEmail = userr.Email.ToUpper();
+                    user.BirthDate = userr.BirthDate;
+                    user.PhoneNumber = userr.PhoneNumber;
+                    await _userManager.UpdateAsync(user);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!SecretaryExists(secretary.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
-            return View(secretary);
+            return View(userr);
         }
 
         // GET: Secretary/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var secretary = await _context.Secretary
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (secretary == null)
-            {
+            var client = await _context.Secretary.Include(c => c.User).FirstOrDefaultAsync(m => m.Id == id);
+            if (client == null)
                 return NotFound();
-            }
-
-            return View(secretary);
+            return View(client);
         }
 
         // POST: Secretary/Delete/5
@@ -140,15 +183,17 @@ namespace HastaneBilgiSistemi.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var secretary = await _context.Secretary.FindAsync(id);
-            _context.Secretary.Remove(secretary);
+            var secretaryy = await _context.Secretary.FirstOrDefaultAsync(x => x.Id == id);
+            if (secretaryy == null)
+                return NotFound();
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == secretaryy.UserId);
+            if (secretaryy == null)
+                return NotFound();
+            _context.UserRoles.Remove(new ApplicationUserRole { UserId = secretaryy.UserId, RoleId = (int)Roles.Client });
+            _context.Users.Remove(user);
+            _context.Secretary.Remove(secretaryy);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SecretaryExists(int id)
-        {
-            return _context.Secretary.Any(e => e.Id == id);
         }
     }
 }
