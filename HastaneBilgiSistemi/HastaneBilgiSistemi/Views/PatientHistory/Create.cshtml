@@ -1,43 +1,68 @@
-﻿@model HastaneBilgiSistemi.Data.Model.PatientHistory
+﻿@model HistoryCreateVM
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Create Patient History</h4>
+<style>
+    .overflow-hidden {
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<h5>Create Examination</h5>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<dl class="row">
+    <dt class="col-sm-6">
+        @Html.DisplayNameFor(model => model.EndDate)
+        @Html.DisplayFor(model => model.EndDate)
+    </dt>
+    <dd class="col-sm-6">
+        @Html.DisplayFor(model => model.EndDate)
+    </dd>
+    <dt class="col-sm-6">
+        @Html.DisplayNameFor(model => model.Reservation)
+    </dt>
+    <dd class="col-sm-6">
+        @Html.DisplayFor(model => model.Reservation.Id)
+    </dd>
+    <dt class="col-sm-6">
+        @Html.DisplayNameFor(model => model.Reservation.DoctorId)
+    </dt>
+</dl>
+<form asp-action="Create">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <h6>Diseas</h6>
+                <hr />
+                <select asp-for="DiseasId" class="form-control" asp-items="ViewBag.DiseasId"></select>
             </div>
+        </div>
+        <div class="col-md-8">
             <div class="form-group">
-                <label asp-for="ReservationId" class="control-label"></label>
-                <select asp-for="ReservationId" class ="form-control" asp-items="ViewBag.ReservationId"></select>
+                <h6>Medication</h6>
+                <hr />
+                @foreach (var item in ViewBag.MedicationId)
+                {
+                    <div class="col-md-6 float-left overflow-hidden">
+                        <label class="control-label">
+                            <input type="checkbox" name="Medication[@item.Id]" />
+                            @item.Name
+                        </label>
+                    </div>
+                }
             </div>
-            <div class="form-group">
-                <label asp-for="DoctorId" class="control-label"></label>
-                <select asp-for="DoctorId" class ="form-control" asp-items="ViewBag.DoctorId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiseasId" class="control-label"></label>
-                <select asp-for="DiseasId" class ="form-control" asp-items="ViewBag.DiseasId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PolyclinicId" class="control-label"></label>
-                <select asp-for="PolyclinicId" class ="form-control" asp-items="ViewBag.PolyclinicId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <input name="StartDate" type="hidden" asp-for="StartDate" />
+        <input name="ReservationId" type="hidden" asp-for="Reservation.Id" />
+        <input type="submit" value="Create" class="btn btn-primary" />
     </div>
-</div>
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>

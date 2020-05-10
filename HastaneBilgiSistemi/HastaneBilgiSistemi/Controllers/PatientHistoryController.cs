@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HastaneBilgiSistemi.Data;
 using HastaneBilgiSistemi.Data.Model;
+using HastaneBilgiSistemi.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
+    [Authorize]
     public class PatientHistoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,10 +24,16 @@ namespace HastaneBilgiSistemi.Controllers
         }
 
         // GET: PatientHistory
+        //TODO doktor filtresi eklenecek
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.PatientHistory.Include(c => c.Diseas).Include(c => c.Doctor).Include(c => c.Polyclinic).Include(c => c.Reservation);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.PatientHistory
+                .Include(c => c.Diseas)
+                .Include(c => c.Doctor)
+                .Include(c => c.Polyclinic)
+                .Include(c => c.Reservation)
+                .Include(c => c.Medications)
+                .ToListAsync());
         }
 
         // GET: PatientHistory/Details/5
@@ -49,13 +59,13 @@ namespace HastaneBilgiSistemi.Controllers
         }
 
         // GET: PatientHistory/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int reservationId)
         {
-            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id");
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id");
-            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id");
-            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id");
-            return View();
+            
+            var historyy = new HistoryCreateVM { StartDate = DateTime.Now, Reservation = await _context.Reservation.Include(x => x.Patient.User).Include(x => x.Polyclinic).Include(x => x.Doctor).FirstOrDefaultAsync(x => x.Id == reservationId) };
+            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Name");
+            ViewData["MedicationId"] = _context.Medication.ToList();
+            return View(historyy);
         }
 
         // POST: PatientHistory/Create
@@ -63,18 +73,29 @@ namespace HastaneBilgiSistemi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EndDate,ReservationId,DoctorId,DiseasId,PolyclinicId")] PatientHistory patientHistory)
+        public async Task<IActionResult> Create([Bind("Id,StartDate,ReservationId,DiseasId,Medication[]")] PatientHistory patientHistory)
         {
-            if (ModelState.IsValid)
+            bool isValidd = true;
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var docc = await _context.Doctor.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (docc == null)
             {
+                ModelState.AddModelError(string.Empty, "Doctor Does Not Exist!");
+                isValidd = false;
+            }
+
+            if (ModelState.IsValid && isValidd)
+            {
+                patientHistory.EndDate = DateTime.Now;
+                patientHistory.DoctorId = docc.Id;
+                patientHistory.PolyclinicId = docc.PolyclinicId;
                 _context.Add(patientHistory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Id", patientHistory.DiseasId);
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "Id", patientHistory.DoctorId);
-            ViewData["PolyclinicId"] = new SelectList(_context.Polyclinic, "Id", "Id", patientHistory.PolyclinicId);
-            ViewData["ReservationId"] = new SelectList(_context.Reservation, "Id", "Id", patientHistory.ReservationId);
+
+            ViewData["DiseasId"] = new SelectList(_context.Diseas, "Id", "Name");
+            ViewData["MedicationId"] = _context.Medication.ToList();
             return View(patientHistory);
         }
 

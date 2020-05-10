@@ -1,7 +1,7 @@
 ﻿@model List<HastaneBilgiSistemi.Data.Model.Reservation>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "TURTEP  Hospital | Home Page";
 }
 
 <div class="text-center">
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Start Examination</a>
+                <a href="/PatientHistory/Create/?reservationId=@item.Id">Start Examination</a>
             </td>
         </tr>
         }
