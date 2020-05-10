@@ -19,24 +19,6 @@ namespace HastaneBilgiSistemi.Areas.Identity
             builder.ConfigureServices((context, services) => {
 
                 
-
-
-                services.Configure<CookiePolicyOptions>(options =>
-                {
-                    options.CheckConsentNeeded = context => true;
-                    options.MinimumSameSitePolicy = SameSiteMode.None;
-                });
-
-                services.AddTransient<ITicketStore, InMemoryTicketStore>();
-                services.AddSingleton<IPostConfigureOptions<CookieAuthenticationOptions>,
-                  ConfigureCookieAuthenticationOptions>();
-
-                services.ConfigureApplicationCookie(options =>
-                {
-                    options.LoginPath = $"/Identity/Account/Login";
-                    options.LogoutPath = $"/Identity/Account/Logout";
-                    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
-                });
             });
         }
     }

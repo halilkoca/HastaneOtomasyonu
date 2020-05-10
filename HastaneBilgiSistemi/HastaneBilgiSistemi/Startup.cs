@@ -7,6 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using HastaneBilgiSistemi.Data.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using HastaneBilgiSistemi.Cache;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
+using HastaneBilgiSistemi.CookieOptions;
 
 namespace HastaneBilgiSistemi
 {
@@ -35,6 +40,23 @@ namespace HastaneBilgiSistemi
             {
                 options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                 options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+            });
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddTransient<ITicketStore, InMemoryTicketStore>();
+            services.AddSingleton<IPostConfigureOptions<CookieAuthenticationOptions>,
+              ConfigureCookieAuthenticationOptions>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
         }
 
