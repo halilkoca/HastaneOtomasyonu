@@ -185,12 +185,7 @@ namespace HastaneBilgiSistemi.Controllers
             var patient = await _context.Patient.FirstOrDefaultAsync(x => x.Id == id);
             if (patient == null)
                 return NotFound();
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == patient.UserId);
-            if (patient == null)
-                return NotFound();
 
-            _context.UserRoles.Remove(new ApplicationUserRole { UserId = patient.UserId, RoleId = (int)Roles.Patient });
-            _context.Users.Remove(user);
             _context.Patient.Remove(patient);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
