@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HastaneBilgiSistemi.Data;
 using HastaneBilgiSistemi.Data.Model;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using HastaneBilgiSistemi.Models;
 
 namespace HastaneBilgiSistemi.Controllers
 {
@@ -24,11 +26,20 @@ namespace HastaneBilgiSistemi.Controllers
         // GET: Reservation
         public async Task<IActionResult> Index()
         {
-            var result = await _context.Reservation
+            var result = _context.Reservation
                 .Include(x => x.Polyclinic)
                 .Include(x => x.Doctor).ThenInclude(doc => doc.User)
                 .Include(x => x.Patient).ThenInclude(doc => doc.User)
-                .ToListAsync();
+                .AsQueryable();
+            
+            if (User.IsInRole(Roles.Doctor.ToString()))
+            {
+                int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var docc = await _context.Doctor.FirstOrDefaultAsync(x => x.UserId == userId);
+                result = result.Where(x => x.DoctorId == docc.Id);
+            }
+
+            var result2 = await result.ToListAsync();
             return View(result);
         }
 
