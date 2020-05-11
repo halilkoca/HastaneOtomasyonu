@@ -9,9 +9,11 @@ using HastaneBilgiSistemi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
+    [Authorize(Roles = "Admin,Secretary,Doctor")]
     public class PatientController : Controller
     {
         private readonly ApplicationDbContext _context;

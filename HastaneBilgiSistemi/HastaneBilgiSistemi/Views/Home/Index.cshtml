@@ -8,7 +8,12 @@
     <h4 class="display-5">Welcome To TURTEP Hospital</h4>
 </div>
 
-<table class="table">
+<div>
+    <a href="/Identity/Account/Manage/Reservation">New Reservation</a>
+</div>
+
+
+<table class="table" asp-authorize asp-roles="Admin,Doctor,Secretary">
     <thead>
         <tr>
             <th>Polyclinic</th>

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Secretary,Doctor")]
     public class PatientHistoryController : Controller
     {
         private readonly ApplicationDbContext _context;

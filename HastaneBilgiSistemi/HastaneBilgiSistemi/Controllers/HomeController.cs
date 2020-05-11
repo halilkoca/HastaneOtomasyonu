@@ -8,9 +8,11 @@ using Microsoft.Extensions.Logging;
 using HastaneBilgiSistemi.Models;
 using HastaneBilgiSistemi.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,13 +29,17 @@ namespace HastaneBilgiSistemi.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await _context.Reservation
+            if (!User.IsInRole("Patient"))
+            {
+                var result = await _context.Reservation
                 .Include(x => x.Polyclinic)
                 .Include(x => x.Doctor).ThenInclude(doc => doc.User)
                 .Include(x => x.Patient).ThenInclude(doc => doc.User)
                 .Where(x => !x.IsCompleted)
                 .ToListAsync();
-            return View(result);
+                return View(result);
+            }
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

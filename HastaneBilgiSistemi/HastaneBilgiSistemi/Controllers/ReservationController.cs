@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HastaneBilgiSistemi.Data;
 using HastaneBilgiSistemi.Data.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
+    [Authorize(Roles = "Admin,Secretary,Doctor")]
     public class ReservationController : Controller
     {
         private readonly ApplicationDbContext _context;

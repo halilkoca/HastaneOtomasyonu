@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HastaneBilgiSistemi.Data;
 using HastaneBilgiSistemi.Data.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
+    [Authorize(Roles = "Admin,Secretary")]
     public class DiseasController : Controller
     {
         private readonly ApplicationDbContext _context;

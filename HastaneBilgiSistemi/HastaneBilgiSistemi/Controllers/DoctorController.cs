@@ -8,9 +8,11 @@ using HastaneBilgiSistemi.Data.Model;
 using Microsoft.AspNetCore.Identity;
 using HastaneBilgiSistemi.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HastaneBilgiSistemi.Controllers
 {
+    [Authorize(Roles = "Admin,Secretary")]
     public class DoctorController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,7 +27,6 @@ namespace HastaneBilgiSistemi.Controllers
         {
             _userManager = userManager;
             _context = context;
-
             _logger = logger;
         }
 
